@@ -215,6 +215,11 @@
       "to": {"table": "file", "column": "file_id"}
     },
     {
+      "name": "from_activity.used_biosample_id_to_biosample.biosample_id",
+      "from": {"table": "activity", "column": "used_biosample_id"},
+      "to": {"table": "biosample", "column": "biosample_id"}
+    },
+    {
       "name": "from_alignmentactivity.used_file_id_to_file.file_id",
       "from": {"table": "alignmentactivity", "column": "used_file_id"},
       "to": {"table": "file", "column": "file_id"}
