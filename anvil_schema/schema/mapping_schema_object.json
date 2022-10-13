@@ -7,6 +7,7 @@
         {"name": "activity_type", "datatype": "string", "array_of": false},
         {"name": "used_file_id", "datatype": "string", "array_of": true},
         {"name": "generated_file_id", "datatype": "string", "array_of": true},
+        {"name": "used_biosample_id", "datatype": "string", "array_of": true},
         {"name": "source_datarepo_row_ids", "datatype": "string", "array_of": true}
       ],
       "primaryKey": ["activity_id"],
