@@ -6,7 +6,7 @@
             "attributes": [{
                 "name": "donor_id",
                 "source": {
-                    "fields": ["ws_subject.subject_id"],
+                    "fields": ["ws_participant.participant_id"],
                     "under_condition": null,
                     "with_transformation": [{"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
@@ -26,29 +26,9 @@
             }, {
                 "name": "phenotypic_sex", 
                 "source": {
-                    "fields": ["ws_subject.sex"],
+                    "fields": ["ws_participant.sex"],
                     "under_condition": null,
                     "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["phenotypic_sex"]}],
-                    "with_row_aggregation": null,
-                    "all_fields_required": true
-                },
-                "required": false
-            }, {
-                "name": "reported_ethnicity", 
-                "source": {
-                    "fields": ["ws_subject.ancestry"],
-                    "under_condition": null,
-                    "with_transformation": [],
-                    "with_row_aggregation": null,
-                    "all_fields_required": true
-                },
-                "required": false
-            }, {
-                "name": "diagnosis_id", 
-                "source": {
-                    "fields": ["ws_subject.subject_id", "ws_subject.disease_id"],
-                    "under_condition": null,
-                    "with_transformation": [{"function": "CUSTOM", "parameters": ["SPLIT(ws_subject.disease_id, '|')", "array"]}, {"function": "PREFIX", "parameters": ["array", "ws_subject.subject_id", "{previous}"]}, {"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
                     "all_fields_required": true
                 },
@@ -72,7 +52,7 @@
             }, {
                 "name": "anatomical_site",
                 "source": {
-                    "fields": ["ws_sample.sample_source"],
+                    "fields": ["ws_sample.tissue_id"],
                     "under_condition": null,
                     "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["anatomical_site"]}],
                     "with_row_aggregation": null,
@@ -82,7 +62,7 @@
             }, {
                 "name": "biosample_type", 
                 "source": {
-                    "fields": ["ws_sample.sample_source"],
+                    "fields": ["ws_sample.tissue_id"],
                     "under_condition": null,
                     "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["biosample_type"]}],
                     "with_row_aggregation": null,
@@ -92,9 +72,39 @@
             }, {
                 "name": "donor_id", 
                 "source": {
-                    "fields": ["ws_sample.subject_id"],
+                    "fields": ["ws_sample.participant"],
                     "under_condition": null,
                     "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "donor_age_at_collection_lower_bound", 
+                "source": {
+                    "fields": ["ws_participant.age"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "donor_age_at_collection_upper_bound", 
+                "source": {
+                    "fields": ["ws_participant.age"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "donor_age_at_collection_unit", 
+                "source": {
+                    "fields": ["ws_participant.age"],
+                    "under_condition": "ws_participant.age IS NOT NULL",
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Years'"]}],
                     "with_row_aggregation": null,
                     "all_fields_required": true
                 },
@@ -110,81 +120,22 @@
                 },
                 "required": false
             }]
-        }]
-    }, {
-        "name": "diagnosis",
-        "record_sets": [{
-            "name": "default",
+        }, {
+            "name": "participant",
             "attributes": [{
-                "name": "diagnosis_id", 
+                "name": "biosample_id",
                 "source": {
-                    "fields": ["ws_subject.subject_id", "ws_subject.disease_id"],
+                    "fields": ["ws_participant.participant_id"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "CUSTOM", "parameters": ["disease", "non-array"]}, {"function": "PREFIX", "parameters": ["non-array", "ws_subject.subject_id", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'biosample'", "{previous}"]}, {"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
                     "all_fields_required": true
                 },
                 "required": true
             }, {
-                "name": "disease",
+                "name": "donor_id", 
                 "source": {
-                    "fields": ["ws_subject.disease_id"],
-                    "under_condition": null,
-                    "with_transformation": [{"function": "CUSTOM", "parameters": ["SPLIT(ws_subject.disease_id, '|')", "array"]}, {"function": "EXPLODE", "parameters": []}],
-                    "with_row_aggregation": null,
-                    "all_fields_required": true
-                },
-                "required": false
-            }, {
-                "name": "onset_age_unit", 
-                "source": {
-                    "fields": ["ws_subject.age_of_onset"],
-                    "under_condition": "ws_subject.age_of_onset IS NOT NULL",
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'years'"]}],
-                    "with_row_aggregation": null,
-                    "all_fields_required": true
-                },
-                "required": false
-            }, {
-                "name": "onset_age_lower_bound", 
-                "source": {
-                    "fields": ["ws_subject.age_of_onset"],
-                    "under_condition": null,
-                    "with_transformation": [],
-                    "with_row_aggregation": {"function": "MIN", "partition_by": "ws_subject.subject_id", "order_by": null},
-                    "all_fields_required": true
-                },
-                "required": false
-            }, {
-                "name": "onset_age_upper_bound", 
-                "source": {
-                    "fields": ["ws_subject.age_of_onset"],
-                    "under_condition": null,
-                    "with_transformation": [],
-                    "with_row_aggregation": {"function": "MAX", "partition_by": "ws_subject.subject_id", "order_by": null},
-                    "all_fields_required": true
-                },
-                "required": false
-            }, {
-                "name": "phenotype", 
-                "source": {
-                    "fields": ["ws_subject.phenotype_description"],
-                    "under_condition": null,
-                    "with_transformation": [],
-                    "with_row_aggregation": null,
-                    "all_fields_required": true
-                },
-                "required": false
-            }]
-        }]
-    }, {
-        "name": "sequencingactivity",
-        "record_sets": [{
-            "name": "default",
-            "attributes": [{
-                "name": "sequencingactivity_id",
-                "source": {
-                    "fields": ["ws_sequencing.sequencing_id"],
+                    "fields": ["ws_participant.participant_id"],
                     "under_condition": null,
                     "with_transformation": [{"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
@@ -192,31 +143,41 @@
                 },
                 "required": true
             }, {
-                "name": "activity_type",
+                "name": "donor_age_at_collection_lower_bound", 
+                "source": {
+                    "fields": ["ws_participant.age"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "donor_age_at_collection_upper_bound", 
+                "source": {
+                    "fields": ["ws_participant.age"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "donor_age_at_collection_unit", 
+                "source": {
+                    "fields": ["ws_participant.age"],
+                    "under_condition": "ws_participant.age IS NOT NULL",
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Years'"]}],
+                    "with_row_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "part_of_dataset_id",
                 "source": {
                     "fields": [],
                     "under_condition": null,
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Sequencing'"]}],
-                    "with_row_aggregation": null,
-                    "all_fields_required": true
-                },
-                "required": false
-            }, {
-                "name": "generated_file_id", 
-                "source": {
-                    "fields": ["ws_sequencing.sequencing_id_file_id", "ws_sequencing.seq_filename_file_id", "ws_sequencing.capture_region_bed_file_file_id", "ws_sequencing.file_id_file_id", "ws_sequencing.cram_file_id", "ws_sequencing.fastq_file_id"],
-                    "under_condition": null,
-                    "with_transformation": [],
-                    "with_row_aggregation": null,
-                    "all_fields_required": false
-                },
-                "required": false
-            }, {
-                "name": "used_biosample_id", 
-                "source": {
-                    "fields": ["ws_sequencing.sample_id"],
-                    "under_condition": null,
-                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_NAME'"]}, {"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
                     "all_fields_required": true
                 },
@@ -404,7 +365,7 @@
     }, {
         "name": "activity",
         "record_sets": [{
-            "name": "default",
+            "name": "sample",
             "attributes": [{
                 "name": "activity_id",
                 "source": {
@@ -422,13 +383,46 @@
                     "under_condition": null,
                     "with_transformation": [{"function": "HARDCODE", "parameters": ["'Unknown'"]}],
                     "with_row_aggregation": null,
-                    "all_fields_required": true
+                    "all_fields_required": false
                 },
                 "required": false
             }, {
                 "name": "generated_file_id", 
                 "source": {
-                    "fields": ["ws_sample.crai_file_id", "ws_sample.cram_file_id", "ws_sample.bai_file_id", "ws_sample.bam_file_id", "ws_sample.csi_file_id", "ws_sample.tbi_file_id", "ws_sample.vcf_file_id", "ws_sample.cram_id_file_id"],
+                    "fields": ["ws_sample.bam_index_file_id", "ws_sample.bam_file_file_id"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }]
+        }, {
+            "name": "participant",
+            "attributes": [{
+                "name": "activity_id",
+                "source": {
+                    "fields": ["ws_participant.participant_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'activity'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Unknown'"]}],
+                    "with_row_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["ws_participant.ase_chr_raw_counts_file_id", "ws_participant.wes_bam_index_file_id", "ws_participant.wgs_cram_index_file_id", "ws_participant.ase_counts_file_id", "ws_participant.wes_bam_file_file_id", "ws_participant.wgs_cram_file_file_id", "ws_participant.ase_wasp_chr_raw_counts_file_id", "ws_participant.ase_wasp_counts_file_id"],
                     "under_condition": null,
                     "with_transformation": [],
                     "with_row_aggregation": null,
