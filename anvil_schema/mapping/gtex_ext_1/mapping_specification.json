@@ -396,6 +396,16 @@
                     "all_fields_required": false
                 },
                 "required": true
+            }, {
+                "name": "used_biosample_id",
+                "source": {
+                    "fields": ["ws_sample.sample_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
             }]
         }, {
             "name": "participant",
@@ -429,6 +439,16 @@
                     "all_fields_required": false
                 },
                 "required": true
+            }, {
+                "name": "used_biosample_id",
+                "source": {
+                    "fields": ["ws_participant.participant_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'biosample'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
             }]
         }]
     }]
