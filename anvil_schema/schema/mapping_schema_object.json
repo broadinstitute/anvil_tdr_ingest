@@ -260,9 +260,9 @@
       "to": {"table": "anvil_dataset", "column": "dataset_id"}
     },
     {
-      "name": "from_donor.diagnosis_id_to_diagnosis.diagnosis_id",
-      "from": {"table": "anvil_donor", "column": "diagnosis_id"},
-      "to": {"table": "anvil_diagnosis", "column": "diagnosis_id"}
+      "name": "from_diagnosis.donor_id_to_donor.donor_id",
+      "from": {"table": "anvil_diagnosis", "column": "donor_id"},
+      "to": {"table": "anvil_donor", "column": "donor_id"}
     },
     {
       "name": "from_project.generated_dataset_id_to_dataset.dataset_id",

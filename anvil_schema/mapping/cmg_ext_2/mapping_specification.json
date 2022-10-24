@@ -1,6 +1,6 @@
 {
     "entities": [{
-        "name": "donor",
+        "name": "anvil_donor",
         "record_sets": [{
             "name": "default",
             "attributes": [{
@@ -47,21 +47,10 @@
                     "all_fields_required": false
                 },
                 "required": false
-            }, {
-                "name": "diagnosis_id", 
-                "source": {
-                    "fields": ["subject.disease_id", "subject.t_14_disease_id", "subject.disease_description", "subject.t_15_disease_description"],
-                    "under_condition": null,
-                    "with_transformation": [{"function": "CUSTOM", "parameters": ["SPLIT({previous}, '|')", "array"]}, {"function": "PREFIX", "parameters": ["array", "subject.subject_id", "{previous}"]}, {"function": "UUID", "parameters": []}],
-                    "with_row_aggregation": null,
-                    "with_column_aggregation": "FIELD_COALESCE",
-                    "all_fields_required": false
-                },
-                "required": false
             }]
         }]
     }, {
-        "name": "biosample",
+        "name": "anvil_biosample",
         "record_sets": [{
             "name": "default",
             "attributes": [{
@@ -155,7 +144,7 @@
             }]
         }]
     }, {
-        "name": "diagnosis",
+        "name": "anvil_diagnosis",
         "record_sets": [{
             "name": "default",
             "attributes": [{
@@ -164,6 +153,17 @@
                     "fields": ["subject.subject_id", "subject.disease_id", "subject.disease_description"],
                     "under_condition": null,
                     "with_transformation": [{"function": "CUSTOM", "parameters": ["disease", "non-array"]}, {"function": "PREFIX", "parameters": ["non-array", "subject.subject_id", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "donor_id", 
+                "source": {
+                    "fields": ["subject.subject_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
@@ -227,7 +227,7 @@
             }]
         }]
     }, {
-        "name": "sequencingactivity",
+        "name": "anvil_sequencingactivity",
         "record_sets": [{
             "name": "default",
             "attributes": [{
@@ -257,7 +257,7 @@
                 "source": {
                     "fields": ["sequencing.sequencing_id_fileref", "sequencing.capture_region_bed_file", "sequencing.crai", "sequencing.crai_md5", "sequencing.crai_or_bai_path", "sequencing.crai_path", "sequencing.cram", "sequencing.cram_flagstat", "sequencing.cram_md5", "sequencing.cram_or_bam_path", "sequencing.cram_path", "sequencing.dels_vcf", "sequencing.dels_vcf_index", "sequencing.large_sv_bedpe", "sequencing.large_sv_candidates_bedpe", "sequencing.large_sv_vcf", "sequencing.large_sv_vcf_index", "sequencing.loupe", "sequencing.md5_path", "sequencing.seq_filename", "sequencing.seq_index_file", "sequencing.summary", "sequencing.variant_filename", "sequencing.variant_index_file", "sequencing.vcf", "sequencing.vcf_index"],
                     "under_condition": null,
-                    "with_transformation": [],
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
@@ -277,7 +277,7 @@
             }]
         }]
     }, {
-        "name": "file",
+        "name": "anvil_file",
         "record_sets": [{
             "name": "default",
             "attributes": [{
@@ -349,7 +349,7 @@
             }]
         }]
     }, {
-        "name": "dataset",
+        "name": "anvil_dataset",
         "record_sets": [{
             "name": "default",
             "attributes": [{
@@ -421,18 +421,18 @@
             }]
         }]
     }, {
-        "name": "project",
+        "name": "anvil_project",
         "record_sets": [{
             "name": "default",
             "attributes": [{
                 "name": "project_id",
                 "source": {
-                    "fields": ["workspace_attributes.value"],
+                    "fields": [],
                     "under_condition": null,
-                    "with_transformation": [{"function": "CUSTOM", "parameters": ["(SELECT MAX(CASE WHEN workspace_attributes.attribute = 'library:projectName' THEN workspace_attributes.value END) FROM workspace_attributes)", "non-array"]}],
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$PROJECT_NAME'"]}, {"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
-                    "all_fields_required": true
+                    "all_fields_required": false
                 },
                 "required": true
             }, {
@@ -449,12 +449,12 @@
             }, {
                 "name": "title",
                 "source": {
-                    "fields": ["workspace_attributes.value"],
-                    "under_condition": "workspace_attributes.attribute = 'library:projectName'",
-                    "with_transformation": [],
-                    "with_row_aggregation": {"function": "MAX", "partition_by": "1", "order_by": null},
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$PROJECT_NAME'"]}],
+                    "with_row_aggregation": null,
                     "with_column_aggregation": null,
-                    "all_fields_required": true
+                    "all_fields_required": false
                 },
                 "required": false
             }, {
@@ -471,7 +471,7 @@
             }]
         }]
     }, {
-        "name": "activity",
+        "name": "anvil_activity",
         "record_sets": [{
             "name": "default",
             "attributes": [{
@@ -501,7 +501,7 @@
                 "source": {
                     "fields": ["sample.GRCH38_tbi", "sample.GRCh38_vcf", "sample.bai", "sample.bam", "sample.bam_file", "sample.bam_index", "sample.bionano_bnx", "sample.bionano_cmap", "sample.child_ilmn", "sample.crai", "sample.crai_md5", "sample.crai_path", "sample.cram", "sample.cram_file", "sample.cram_id", "sample.cram_index", "sample.cram_md5", "sample.cram_path", "sample.csi", "sample.dels_tbi", "sample.dels_vcf", "sample.gVCF", "sample.gVCF_TBI", "sample.green_idat", "sample.gtc", "sample.hic", "sample.hifi", "sample.large_tbi", "sample.large_vcf", "sample.mat_ilmn", "sample.md5_path", "sample.nanopore", "sample.pat_ilmn", "sample.phased_variant_tbi", "sample.phased_variant_vcf", "sample.red_idat", "sample.strandseq", "sample.tbi", "sample.vcf", "sample.vcf_index"],
                     "under_condition": null,
-                    "with_transformation": [],
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
