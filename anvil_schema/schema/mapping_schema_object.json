@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "tables": [
     {
       "name": "anvil_activity",
@@ -147,6 +147,7 @@
         {"name": "reference_assembly", "datatype": "string", "array_of": true, "required": false},
         {"name": "file_name", "datatype": "string", "array_of": false, "required": false},
         {"name": "file_ref", "datatype": "fileref", "array_of": false, "required": false},
+        {"name": "supplementary_file_flag", "datatype": "boolean", "array_of": false, "required": false},
         {"name": "source_datarepo_row_ids", "datatype": "string", "array_of": true, "required": false}
       ],
       "primaryKey": ["file_id"],
