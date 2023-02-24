@@ -6,7 +6,7 @@
             "attributes": [{
                 "name": "donor_id",
                 "source": {
-                    "fields": ["participant.participant_id"],
+                    "fields": ["subject.subject_id"],
                     "under_condition": null,
                     "with_transformation": [{"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
@@ -39,12 +39,23 @@
             }, {
                 "name": "phenotypic_sex", 
                 "source": {
-                    "fields": ["participant.sex"],
+                    "fields": ["subject.sex", "subject.t_09_sex"],
                     "under_condition": null,
                     "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["phenotypic_sex"]}],
                     "with_row_aggregation": null,
-                    "with_column_aggregation": null,
-                    "all_fields_required": true
+                    "with_column_aggregation": "FIELD_COALESCE",
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "reported_ethnicity", 
+                "source": {
+                    "fields": ["subject.ancestry", "subject.t_10_ancestry", "subject.race_ethnicity"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": "FIELD_COALESCE",
+                    "all_fields_required": false
                 },
                 "required": false
             }]
@@ -67,31 +78,31 @@
             }, {
                 "name": "anatomical_site",
                 "source": {
-                    "fields": ["sample.tissue_id"],
+                    "fields": ["sample.sample_source", "sample.t_04_sample_source"],
                     "under_condition": null,
                     "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["anatomical_site"]}],
                     "with_row_aggregation": null,
-                    "with_column_aggregation": null,
-                    "all_fields_required": true
+                    "with_column_aggregation": "FIELD_COALESCE",
+                    "all_fields_required": false
                 },
                 "required": false
             }, {
                 "name": "biosample_type", 
                 "source": {
-                    "fields": ["sample.tissue_id"],
+                    "fields": ["sample.sample_source", "sample.t_04_sample_source"],
                     "under_condition": null,
                     "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["biosample_type"]}],
                     "with_row_aggregation": null,
-                    "with_column_aggregation": null,
-                    "all_fields_required": true
+                    "with_column_aggregation": "FIELD_COALESCE",
+                    "all_fields_required": false
                 },
                 "required": false
             }, {
                 "name": "donor_id", 
                 "source": {
-                    "fields": ["sample.participant", "sample.participant_id", "sample.Participant_id"],
+                    "fields": ["sample.subject_id", "sample.t_01_subject_id", "sample.participant_id"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_transformation": [{"function": "FIELD_COALESCE", "parameters": []}, {"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": "FIELD_COALESCE",
                     "all_fields_required": false
@@ -100,7 +111,7 @@
             }, {
                 "name": "donor_age_at_collection_lower_bound", 
                 "source": {
-                    "fields": ["participant.age"],
+                    "fields": ["subject.age_at_dna_collection"],
                     "under_condition": null,
                     "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
                     "with_row_aggregation": null,
@@ -111,7 +122,7 @@
             }, {
                 "name": "donor_age_at_collection_upper_bound", 
                 "source": {
-                    "fields": ["participant.age"],
+                    "fields": ["subject.age_at_dna_collection"],
                     "under_condition": null,
                     "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
                     "with_row_aggregation": null,
@@ -122,8 +133,8 @@
             }, {
                 "name": "donor_age_at_collection_unit", 
                 "source": {
-                    "fields": ["participant.age"],
-                    "under_condition": "SAFE_CAST(participant.age AS INT64) IS NOT NULL",
+                    "fields": ["subject.age_at_dna_collection"],
+                    "under_condition": "SAFE_CAST(subject.age_at_dna_collection AS INT64) IS NOT NULL",
                     "with_transformation": [{"function": "HARDCODE", "parameters": ["'Years'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
@@ -142,23 +153,98 @@
                 },
                 "required": false
             }]
-        }, {
-            "name": "participant",
+        }]
+    }, {
+        "name": "anvil_diagnosis",
+        "record_sets": [{
+            "name": "default",
             "attributes": [{
-                "name": "biosample_id",
+                "name": "diagnosis_id", 
                 "source": {
-                    "fields": ["participant.participant_id"],
+                    "fields": ["subject.subject_id", "subject.disease_id", "subject.disease_description"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'biosample-participant'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_transformation": [{"function": "CUSTOM", "parameters": ["disease", "non-array"]}, {"function": "PREFIX", "parameters": ["non-array", "subject.subject_id", "{previous}"]}, {"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
-                    "all_fields_required": true
+                    "all_fields_required": false
                 },
                 "required": true
             }, {
                 "name": "donor_id", 
                 "source": {
-                    "fields": ["participant.participant_id"],
+                    "fields": ["subject.subject_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "disease",
+                "source": {
+                    "fields": ["subject.disease_id", "subject.t_14_disease_id", "subject.disease_description", "subject.t_15_disease_description"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "CUSTOM", "parameters": ["SPLIT(CAST({previous} AS STRING), '|')", "array"]}, {"function": "EXPLODE", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": "FIELD_COALESCE",
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "onset_age_unit", 
+                "source": {
+                    "fields": ["subject.age_of_onset"],
+                    "under_condition": "SAFE_CAST(subject.age_of_onset AS INT64) IS NOT NULL",
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'years'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "onset_age_lower_bound", 
+                "source": {
+                    "fields": ["subject.age_of_onset"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
+                    "with_row_aggregation": {"function": "MIN", "partition_by": "subject.subject_id", "order_by": null},
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "onset_age_upper_bound", 
+                "source": {
+                    "fields": ["subject.age_of_onset"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
+                    "with_row_aggregation": {"function": "MAX", "partition_by": "subject.subject_id", "order_by": null},
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "phenotype", 
+                "source": {
+                    "fields": ["subject.phenotype_description", "subject.t_21_phenotype_description"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": "FIELD_COALESCE",
+                    "all_fields_required": false
+                },
+                "required": false
+            }]
+        }]
+    }, {
+        "name": "anvil_sequencingactivity",
+        "record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "sequencingactivity_id",
+                "source": {
+                    "fields": ["sequencing.sequencing_id"],
                     "under_condition": null,
                     "with_transformation": [{"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
@@ -167,51 +253,39 @@
                 },
                 "required": true
             }, {
-                "name": "donor_age_at_collection_lower_bound", 
-                "source": {
-                    "fields": ["participant.age"],
-                    "under_condition": null,
-                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
-                    "with_row_aggregation": null,
-                    "with_column_aggregation": null,
-                    "all_fields_required": true
-                },
-                "required": false
-            }, {
-                "name": "donor_age_at_collection_upper_bound", 
-                "source": {
-                    "fields": ["participant.age"],
-                    "under_condition": null,
-                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
-                    "with_row_aggregation": null,
-                    "with_column_aggregation": null,
-                    "all_fields_required": true
-                },
-                "required": false
-            }, {
-                "name": "donor_age_at_collection_unit", 
-                "source": {
-                    "fields": ["participant.age"],
-                    "under_condition": "SAFE_CAST(participant.age AS INT64) IS NOT NULL",
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Years'"]}],
-                    "with_row_aggregation": null,
-                    "with_column_aggregation": null,
-                    "all_fields_required": true
-                },
-                "required": false
-            }, {
-                "name": "part_of_dataset_id",
+                "name": "activity_type",
                 "source": {
                     "fields": [],
                     "under_condition": null,
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_NAME'"]}, {"function": "UUID", "parameters": []}],
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Sequencing'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
                 },
                 "required": false
-            }],
-            "run_criteria": {"function": "ANY_FIELD_EXISTS", "parameters": ["participant.ase_chrX_raw_counts", "participant.ase_chrx_raw_counts", "participant.ase_counts", "participant.ase_wasp_chrX_raw_counts", "participant.ase_wasp_counts", "participant.chr10_hc_bgzip", "participant.chr10_hc_tabix", "participant.chr10_hc_vcf", "participant.chr11_hc_bgzip", "participant.chr11_hc_tabix", "participant.chr11_hc_vcf", "participant.chr12_hc_bgzip", "participant.chr12_hc_tabix", "participant.chr12_hc_vcf", "participant.chr13_hc_bgzip", "participant.chr13_hc_tabix", "participant.chr13_hc_vcf", "participant.chr14_hc_bgzip", "participant.chr14_hc_tabix", "participant.chr14_hc_vcf", "participant.chr15_hc_bgzip", "participant.chr15_hc_tabix", "participant.chr15_hc_vcf", "participant.chr16_hc_bgzip", "participant.chr16_hc_tabix", "participant.chr16_hc_vcf", "participant.chr17_hc_bgzip", "participant.chr17_hc_tabix", "participant.chr17_hc_vcf", "participant.chr18_hc_bgzip", "participant.chr18_hc_tabix", "participant.chr18_hc_vcf", "participant.chr19_hc_bgzip", "participant.chr19_hc_tabix", "participant.chr19_hc_vcf", "participant.chr1_hc_bgzip", "participant.chr1_hc_tabix", "participant.chr1_hc_vcf", "participant.chr20_hc_bgzip", "participant.chr20_hc_tabix", "participant.chr20_hc_vcf", "participant.chr21_hc_bgzip", "participant.chr21_hc_tabix", "participant.chr21_hc_vcf", "participant.chr22_hc_bgzip", "participant.chr22_hc_tabix", "participant.chr22_hc_vcf", "participant.chr2_hc_bgzip", "participant.chr2_hc_tabix", "participant.chr2_hc_vcf", "participant.chr3_hc_bgzip", "participant.chr3_hc_tabix", "participant.chr3_hc_vcf", "participant.chr4_hc_bgzip", "participant.chr4_hc_tabix", "participant.chr4_hc_vcf", "participant.chr5_hc_bgzip", "participant.chr5_hc_tabix", "participant.chr5_hc_vcf", "participant.chr6_hc_bgzip", "participant.chr6_hc_tabix", "participant.chr6_hc_vcf", "participant.chr7_hc_bgzip", "participant.chr7_hc_tabix", "participant.chr7_hc_vcf", "participant.chr8_hc_bgzip", "participant.chr8_hc_tabix", "participant.chr8_hc_vcf", "participant.chr9_hc_bgzip", "participant.chr9_hc_tabix", "participant.chr9_hc_vcf", "participant.chrX_hc_bgzip", "participant.chrx_hc_bgzip", "participant.chrX_hc_tabix", "participant.chrx_hc_tabix", "participant.chrX_hc_vcf", "participant.chrx_hc_vcf", "participant.chrY_hc_bgzip", "participant.chry_hc_bgzip", "participant.chrY_hc_tabix", "participant.chry_hc_tabix", "participant.chrY_hc_vcf", "participant.chry_hc_vcf", "participant.cram", "participant.cram_index", "participant.gVCF", "participant.gvcf", "participant.gVCF_TBI", "participant.gvcf_tbi", "participant.mosdepth_global_dist", "participant.mosdepth_regions_bed", "participant.mosdepth_regions_bed_idx", "participant.mosdepth_regions_dist", "participant.mosdepth_summary", "participant.read_1_fastq", "participant.read_2_fastq", "participant.samtools_stats", "participant.wes_bam_file", "participant.wes_bam_index", "participant.wgs_cram_file", "participant.wgs_cram_index"]}
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["sequencing.sequencing_id_fileref", "sequencing.capture_region_bed_file", "sequencing.crai", "sequencing.crai_md5", "sequencing.crai_or_bai_path", "sequencing.crai_path", "sequencing.cram", "sequencing.cram_flagstat", "sequencing.cram_md5", "sequencing.cram_or_bam_path", "sequencing.cram_path", "sequencing.dels_vcf", "sequencing.dels_vcf_index", "sequencing.large_sv_bedpe", "sequencing.large_sv_candidates_bedpe", "sequencing.large_sv_vcf", "sequencing.large_sv_vcf_index", "sequencing.loupe", "sequencing.md5_path", "sequencing.seq_filename", "sequencing.seq_index_file", "sequencing.summary", "sequencing.variant_filename", "sequencing.variant_index_file", "sequencing.vcf", "sequencing.vcf_index"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "used_biosample_id", 
+                "source": {
+                    "fields": ["sequencing.collaborator_sample_id", "sequencing.sample_id", "sequencing.sample", "sequencing.sample_alias"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": "FIELD_COALESCE",
+                    "all_fields_required": false
+                },
+                "required": false
+            }]
         }]
     }, {
         "name": "anvil_file",
@@ -410,7 +484,7 @@
     }, {
         "name": "anvil_activity",
         "record_sets": [{
-            "name": "sample",
+            "name": "default",
             "attributes": [{
                 "name": "activity_id",
                 "source": {
@@ -436,7 +510,7 @@
             }, {
                 "name": "generated_file_id", 
                 "source": {
-                    "fields": ["sample.GRCH38_tbi", "sample.grch38_tbi", "sample.GRCh38_vcf", "sample.grch38_vcf", "sample.bai", "sample.bam", "sample.bam_file", "sample.bam_index", "sample.bionano_bnx", "sample.bionano_cmap", "sample.child_ilmn", "sample.crai", "sample.crai_md5", "sample.crai_path", "sample.cram", "sample.cram_file", "sample.cram_id", "sample.cram_index", "sample.cram_md5", "sample.cram_path", "sample.csi", "sample.dels_tbi", "sample.dels_vcf", "sample.gVCF", "sample.gvcf", "sample.gVCF_TBI", "sample.gvcf_tbi", "sample.green_idat", "sample.gtc", "sample.hic", "sample.hifi", "sample.large_tbi", "sample.large_vcf", "sample.mat_ilmn", "sample.md5_path", "sample.nanopore", "sample.pat_ilmn", "sample.phased_variant_tbi", "sample.phased_variant_vcf", "sample.red_idat", "sample.strandseq", "sample.tbi", "sample.vcf", "sample.vcf_index"],
+                    "fields": ["sample.GRCH38_tbi", "sample.grch38_tbi", "sample.GRCh38_vcf", "sample.grch38_vcf", "sample.bai", "sample.bam", "sample.bam_file", "sample.bam_index", "sample.bionano_bnx", "sample.bionano_cmap", "sample.child_ilmn", "sample.crai", "sample.crai_md5", "sample.crai_path", "sample.cram", "sample.cram_file", "sample.cram_id", "sample.cram_index", "sample.cram_md5", "sample.cram_path", "sample.csi", "sample.dels_tbi", "sample.dels_vcf", "sample.gVCF", "sample.gvcf", "sample.gVCF_TBI", "sample.gvcf_tbi", "sample.green_idat", "sample.gtc", "sample.hic", "sample.hifi", "sample.large_tbi", "sample.large_vcf", "sample.mat_ilmn", "sample.md5_path", "sample.nanopore", "sample.pat_ilmn", "sample.phased_variant_tbi", "sample.phased_variant_vcf", "sample.red_idat", "sample.strandseq", "sample.tbi", "sample.vcf", "sample.vcf_index", "qc_result_sample.cram"],
                     "under_condition": null,
                     "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
                     "with_row_aggregation": null,
@@ -450,53 +524,6 @@
                     "fields": ["sample.sample_id"],
                     "under_condition": null,
                     "with_transformation": [{"function": "UUID", "parameters": []}],
-                    "with_row_aggregation": null,
-                    "with_column_aggregation": null,
-                    "all_fields_required": true
-                },
-                "required": false
-            }]
-        }, {
-            "name": "participant",
-            "attributes": [{
-                "name": "activity_id",
-                "source": {
-                    "fields": ["participant.participant_id"],
-                    "under_condition": null,
-                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'activity-participant'", "{previous}"]}, {"function": "UUID", "parameters": []}],
-                    "with_row_aggregation": null,
-                    "with_column_aggregation": null,
-                    "all_fields_required": true
-                },
-                "required": true
-            }, {
-                "name": "activity_type",
-                "source": {
-                    "fields": [],
-                    "under_condition": null,
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Unknown'"]}],
-                    "with_row_aggregation": null,
-                    "with_column_aggregation": null,
-                    "all_fields_required": false
-                },
-                "required": false
-            }, {
-                "name": "generated_file_id", 
-                "source": {
-                    "fields": ["participant.ase_chrX_raw_counts", "participant.ase_chrx_raw_counts", "participant.ase_counts", "participant.ase_wasp_chrX_raw_counts", "participant.ase_wasp_counts", "participant.chr10_hc_bgzip", "participant.chr10_hc_tabix", "participant.chr10_hc_vcf", "participant.chr11_hc_bgzip", "participant.chr11_hc_tabix", "participant.chr11_hc_vcf", "participant.chr12_hc_bgzip", "participant.chr12_hc_tabix", "participant.chr12_hc_vcf", "participant.chr13_hc_bgzip", "participant.chr13_hc_tabix", "participant.chr13_hc_vcf", "participant.chr14_hc_bgzip", "participant.chr14_hc_tabix", "participant.chr14_hc_vcf", "participant.chr15_hc_bgzip", "participant.chr15_hc_tabix", "participant.chr15_hc_vcf", "participant.chr16_hc_bgzip", "participant.chr16_hc_tabix", "participant.chr16_hc_vcf", "participant.chr17_hc_bgzip", "participant.chr17_hc_tabix", "participant.chr17_hc_vcf", "participant.chr18_hc_bgzip", "participant.chr18_hc_tabix", "participant.chr18_hc_vcf", "participant.chr19_hc_bgzip", "participant.chr19_hc_tabix", "participant.chr19_hc_vcf", "participant.chr1_hc_bgzip", "participant.chr1_hc_tabix", "participant.chr1_hc_vcf", "participant.chr20_hc_bgzip", "participant.chr20_hc_tabix", "participant.chr20_hc_vcf", "participant.chr21_hc_bgzip", "participant.chr21_hc_tabix", "participant.chr21_hc_vcf", "participant.chr22_hc_bgzip", "participant.chr22_hc_tabix", "participant.chr22_hc_vcf", "participant.chr2_hc_bgzip", "participant.chr2_hc_tabix", "participant.chr2_hc_vcf", "participant.chr3_hc_bgzip", "participant.chr3_hc_tabix", "participant.chr3_hc_vcf", "participant.chr4_hc_bgzip", "participant.chr4_hc_tabix", "participant.chr4_hc_vcf", "participant.chr5_hc_bgzip", "participant.chr5_hc_tabix", "participant.chr5_hc_vcf", "participant.chr6_hc_bgzip", "participant.chr6_hc_tabix", "participant.chr6_hc_vcf", "participant.chr7_hc_bgzip", "participant.chr7_hc_tabix", "participant.chr7_hc_vcf", "participant.chr8_hc_bgzip", "participant.chr8_hc_tabix", "participant.chr8_hc_vcf", "participant.chr9_hc_bgzip", "participant.chr9_hc_tabix", "participant.chr9_hc_vcf", "participant.chrX_hc_bgzip", "participant.chrx_hc_bgzip", "participant.chrX_hc_tabix", "participant.chrx_hc_tabix", "participant.chrX_hc_vcf", "participant.chrx_hc_vcf", "participant.chrY_hc_bgzip", "participant.chry_hc_bgzip", "participant.chrY_hc_tabix", "participant.chry_hc_tabix", "participant.chrY_hc_vcf", "participant.chry_hc_vcf", "participant.cram", "participant.cram_index", "participant.gVCF", "participant.gvcf", "participant.gVCF_TBI", "participant.gvcf_tbi", "participant.mosdepth_global_dist", "participant.mosdepth_regions_bed", "participant.mosdepth_regions_bed_idx", "participant.mosdepth_regions_dist", "participant.mosdepth_summary", "participant.read_1_fastq", "participant.read_2_fastq", "participant.samtools_stats", "participant.wes_bam_file", "participant.wes_bam_index", "participant.wgs_cram_file", "participant.wgs_cram_index"],
-                    "under_condition": null,
-                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
-                    "with_row_aggregation": null,
-                    "with_column_aggregation": null,
-                    "all_fields_required": false
-                },
-                "required": true
-            }, {
-                "name": "used_biosample_id",
-                "source": {
-                    "fields": ["participant.participant_id"],
-                    "under_condition": null,
-                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'biosample-participant'", "{previous}"]}, {"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": true

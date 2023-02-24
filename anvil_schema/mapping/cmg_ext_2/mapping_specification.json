@@ -15,6 +15,17 @@
                 },
                 "required": true
             }, {
+                "name": "organism_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "CUSTOM", "parameters": ["(SELECT MAX(CASE WHEN REGEXP_CONTAINS(value, '(h37|h38|h39|hg16|hg17|hg18|hg19|hs37|hs38|b37)') THEN 'Homo sapiens' END) AS organism_type FROM `$BQ_DATASET.workspace_attributes` WHERE attribute = 'library:reference')", "non-array"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
                 "name": "part_of_dataset_id",
                 "source": {
                     "fields": [],
@@ -102,7 +113,7 @@
                 "source": {
                     "fields": ["subject.age_at_dna_collection"],
                     "under_condition": null,
-                    "with_transformation": [],
+                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": true
@@ -113,7 +124,7 @@
                 "source": {
                     "fields": ["subject.age_at_dna_collection"],
                     "under_condition": null,
-                    "with_transformation": [],
+                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": true
@@ -123,7 +134,7 @@
                 "name": "donor_age_at_collection_unit", 
                 "source": {
                     "fields": ["subject.age_at_dna_collection"],
-                    "under_condition": "subject.age_at_dna_collection IS NOT NULL",
+                    "under_condition": "SAFE_CAST(subject.age_at_dna_collection AS INT64) IS NOT NULL",
                     "with_transformation": [{"function": "HARDCODE", "parameters": ["'Years'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
@@ -184,7 +195,7 @@
                 "name": "onset_age_unit", 
                 "source": {
                     "fields": ["subject.age_of_onset"],
-                    "under_condition": "subject.age_of_onset IS NOT NULL",
+                    "under_condition": "SAFE_CAST(subject.age_of_onset AS INT64) IS NOT NULL",
                     "with_transformation": [{"function": "HARDCODE", "parameters": ["'years'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
@@ -196,7 +207,7 @@
                 "source": {
                     "fields": ["subject.age_of_onset"],
                     "under_condition": null,
-                    "with_transformation": [],
+                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
                     "with_row_aggregation": {"function": "MIN", "partition_by": "subject.subject_id", "order_by": null},
                     "with_column_aggregation": null,
                     "all_fields_required": true
@@ -207,7 +218,7 @@
                 "source": {
                     "fields": ["subject.age_of_onset"],
                     "under_condition": null,
-                    "with_transformation": [],
+                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
                     "with_row_aggregation": {"function": "MAX", "partition_by": "subject.subject_id", "order_by": null},
                     "with_column_aggregation": null,
                     "all_fields_required": true
