@@ -1,0 +1,1 @@
+SELECT 1234 AS data_type_id FROM `{project}.{schema}.data_types` WHERE data_type_id = 9990014
