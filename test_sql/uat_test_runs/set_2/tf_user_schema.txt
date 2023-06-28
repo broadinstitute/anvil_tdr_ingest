@@ -1,1 +1,0 @@
-SELECT file_id, '{hardcoded_value}' AS message, NULL AS null_field, file_ref FROM `{project}.{schema}.file_inventory`
