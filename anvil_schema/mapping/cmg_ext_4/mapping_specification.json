@@ -307,7 +307,7 @@
                 "source": {
                     "fields": ["file_inventory.full_extension"],
                     "under_condition": null,
-                    "with_transformation": [],
+                    "with_transformation": [{"function": "VALUE_FILTER", "parameters": ["'Other'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": true
