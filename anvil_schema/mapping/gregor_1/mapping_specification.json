@@ -483,7 +483,7 @@
         "record_sets": [{
             "name": "called_variants_dna_short_read",
             "attributes": [{
-                "name": "sequencingactivity_id",
+                "name": "variantcallingactivity_id",
                 "source": {
                     "fields": ["called_variants_dna_short_read.called_variants_dna_short_read_id"],
                     "under_condition": null,
@@ -529,7 +529,7 @@
             }, {
                 "name": "generated_file_id", 
                 "source": {
-                    "fields": ["called_variants_dna_file"],
+                    "fields": ["called_variants_dna_short_read.called_variants_dna_file"],
                     "under_condition": null,
                     "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
                     "with_row_aggregation": null,
