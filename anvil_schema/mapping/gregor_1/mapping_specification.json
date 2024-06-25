@@ -364,22 +364,11 @@
                 },
                 "required": false
             }, {
-                "name": "assay_type",
-                "source": {
-                    "fields": [],
-                    "under_condition": null,
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'AlignmentActivity'"]}],
-                    "with_row_aggregation": null,
-                    "with_column_aggregation": null,
-                    "all_fields_required": false
-                },
-                "required": false
-            }, {
                 "name": "data_modality",
                 "source": {
                     "fields": [],
                     "under_condition": null,
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'AlignmentActivity'"]}],
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Genomic'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
@@ -433,22 +422,11 @@
                 },
                 "required": false
             }, {
-                "name": "assay_type",
-                "source": {
-                    "fields": [],
-                    "under_condition": null,
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'AlignmentActivity'"]}],
-                    "with_row_aggregation": null,
-                    "with_column_aggregation": null,
-                    "all_fields_required": false
-                },
-                "required": false
-            }, {
                 "name": "data_modality",
                 "source": {
                     "fields": [],
                     "under_condition": null,
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'AlignmentActivity'"]}],
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Transcriptomic'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
@@ -505,22 +483,11 @@
                 },
                 "required": false
             }, {
-                "name": "assay_type",
-                "source": {
-                    "fields": [],
-                    "under_condition": null,
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'VariantCallActivity'"]}],
-                    "with_row_aggregation": null,
-                    "with_column_aggregation": null,
-                    "all_fields_required": false
-                },
-                "required": false
-            }, {
                 "name": "data_modality",
                 "source": {
                     "fields": [],
                     "under_condition": null,
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'VariantCallActivity'"]}],
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Genomic'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
