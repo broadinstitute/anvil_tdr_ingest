@@ -19,7 +19,7 @@
                 "source": {
                     "fields": [],
                     "under_condition": null,
-                    "with_transformation": [{"function": "CUSTOM", "parameters": ["(SELECT MAX(CASE WHEN REGEXP_CONTAINS(value, '(h37|h38|h39|hg16|hg17|hg18|hg19|hs37|hs38|b37)') THEN 'Homo sapiens' END) AS organism_type FROM `$BQ_DATASET.workspace_attributes` WHERE attribute = 'library:reference')", "non-array"]}],
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Human'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
@@ -41,7 +41,7 @@
                 "source": {
                     "fields": ["subject.sex", "subject.t_09_sex"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["phenotypic_sex"]}],
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["phenotypic_sex", false]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": "FIELD_COALESCE",
                     "all_fields_required": false
@@ -80,7 +80,7 @@
                 "source": {
                     "fields": ["sample.sample_source", "sample.t_04_sample_source"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["anatomical_site"]}],
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["anatomical_site", false]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": "FIELD_COALESCE",
                     "all_fields_required": false
@@ -91,7 +91,7 @@
                 "source": {
                     "fields": ["sample.sample_source", "sample.t_04_sample_source"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["biosample_type"]}],
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["biosample_type", false]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": "FIELD_COALESCE",
                     "all_fields_required": false
@@ -183,11 +183,11 @@
             }, {
                 "name": "disease",
                 "source": {
-                    "fields": ["subject.disease_id", "subject.t_14_disease_id", "subject.disease_description", "subject.t_15_disease_description"],
+                    "fields": ["subject.disease_id", "subject.t_14_disease_id", "subject.t_18_disease_id", "participant.t_19_disease_id", "subject.disease_description", "subject.t_15_disease_description", "subject.t_19_disease_description", "participant.t_20_disease_description"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "CUSTOM", "parameters": ["SPLIT(CAST({previous} AS STRING), '|')", "array"]}, {"function": "EXPLODE", "parameters": []}],
+                    "with_transformation": [{"function": "CUSTOM", "parameters": ["SPLIT(ARRAY_TO_STRING({previous}, ','), '|')", "array"]}, {"function": "EXPLODE", "parameters": []}, {"function": "VOCAB_MAP", "parameters": ["disease", false]}],
                     "with_row_aggregation": null,
-                    "with_column_aggregation": "FIELD_COALESCE",
+                    "with_column_aggregation": "COALESCE",
                     "all_fields_required": false
                 },
                 "required": true

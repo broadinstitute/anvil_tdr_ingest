@@ -19,7 +19,7 @@
                 "source": {
                     "fields": [],
                     "under_condition": null,
-                    "with_transformation": [{"function": "CUSTOM", "parameters": ["(SELECT MAX(CASE WHEN REGEXP_CONTAINS(value, '(h37|h38|h39|hg16|hg17|hg18|hg19|hs37|hs38|b37)') THEN 'Homo sapiens' END) AS organism_type FROM `$BQ_DATASET.workspace_attributes` WHERE attribute = 'library:reference')", "non-array"]}],
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Human'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
@@ -41,7 +41,7 @@
                 "source": {
                     "fields": ["participant.sex"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["phenotypic_sex"]}],
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["phenotypic_sex", false]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": true
@@ -80,7 +80,7 @@
                 "source": {
                     "fields": ["analyte.primary_biosample"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["biosample_type"]}],
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["biosample_type", false]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": true
@@ -338,11 +338,11 @@
             }]
         }]
     }, {
-        "name": "anvil_alignmentactivity",
+        "name": "anvil_activity",
         "record_sets": [{
             "name": "aligned_dna_short_read",
             "attributes": [{
-                "name": "alignmentactivity_id",
+                "name": "activity_id",
                 "source": {
                     "fields": ["aligned_dna_short_read.aligned_dna_short_read_id"],
                     "under_condition": null,
@@ -358,17 +358,6 @@
                     "fields": [],
                     "under_condition": null,
                     "with_transformation": [{"function": "HARDCODE", "parameters": ["'AlignmentActivity'"]}],
-                    "with_row_aggregation": null,
-                    "with_column_aggregation": null,
-                    "all_fields_required": false
-                },
-                "required": false
-            }, {
-                "name": "data_modality",
-                "source": {
-                    "fields": [],
-                    "under_condition": null,
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Genomic'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
@@ -400,7 +389,7 @@
         }, {
             "name": "aligned_rna_short_read",
             "attributes": [{
-                "name": "alignmentactivity_id",
+                "name": "activity_id",
                 "source": {
                     "fields": ["aligned_rna_short_read.aligned_rna_short_read_id"],
                     "under_condition": null,
@@ -416,17 +405,6 @@
                     "fields": [],
                     "under_condition": null,
                     "with_transformation": [{"function": "HARDCODE", "parameters": ["'AlignmentActivity'"]}],
-                    "with_row_aggregation": null,
-                    "with_column_aggregation": null,
-                    "all_fields_required": false
-                },
-                "required": false
-            }, {
-                "name": "data_modality",
-                "source": {
-                    "fields": [],
-                    "under_condition": null,
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Transcriptomic'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false

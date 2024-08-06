@@ -19,7 +19,7 @@
                 "source": {
                     "fields": [],
                     "under_condition": null,
-                    "with_transformation": [{"function": "CUSTOM", "parameters": ["(SELECT MAX(CASE WHEN REGEXP_CONTAINS(value, '(h37|h38|h39|hg16|hg17|hg18|hg19|hs37|hs38|b37)') THEN 'Homo sapiens' END) AS organism_type FROM `$BQ_DATASET.workspace_attributes` WHERE attribute = 'library:reference')", "non-array"]}],
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Human'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
@@ -41,12 +41,51 @@
                 "source": {
                     "fields": ["participant.sex"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["phenotypic_sex"]}],
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["phenotypic_sex", false]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": true
                 },
                 "required": false
+            }]
+        }]
+    }, {
+        "name": "anvil_diagnosis",
+        "record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "diagnosis_id", 
+                "source": {
+                    "fields": ["participant.participant_id", "participant.disease_description"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "participant.participant_id", "participant.disease_description"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "donor_id", 
+                "source": {
+                    "fields": ["participant.participant_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "disease",
+                "source": {
+                    "fields": ["participant.disease_description"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["disease", false]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
             }]
         }]
     }, {
@@ -69,7 +108,7 @@
                 "source": {
                     "fields": ["sample.tissue_id"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["anatomical_site"]}],
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["anatomical_site", false]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": true
@@ -80,7 +119,7 @@
                 "source": {
                     "fields": ["sample.tissue_id"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["biosample_type"]}],
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["biosample_type", false]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": true
