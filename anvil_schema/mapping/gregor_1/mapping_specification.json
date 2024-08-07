@@ -52,12 +52,51 @@
                 "source": {
                     "fields": ["participant.reported_ethnicity", "participant.reported_race"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "CUSTOM", "parameters": ["SPLIT((SELECT STRING_AGG(DISTINCT col, ',') FROM UNNEST(SPLIT(TRIM(FORMAT('%t', (SELECT AS STRUCT NULLIF(participant.reported_ethnicity, ''), ARRAY_TO_STRING(SPLIT(NULLIF(participant.reported_race, ''),'|'), ','))), '()'), ', ')) AS col WHERE NOT UPPER(col) = 'NULL'), ',')", "array"]}], 
+                    "with_transformation": [{"function": "CUSTOM", "parameters": ["SPLIT((SELECT STRING_AGG(DISTINCT col, ',') FROM UNNEST(SPLIT(TRIM(FORMAT('%t', (SELECT AS STRUCT NULLIF(participant.reported_ethnicity, ''), ARRAY_TO_STRING(SPLIT(NULLIF(participant.reported_race, ''),'|'), ','))), '()'), ', ')) AS col WHERE NOT UPPER(col) = 'NULL'), ',')", "array"]}, {"function": "VOCAB_MAP", "parameters": ["reported_ethnicity", false]}], 
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
                 },
                 "required": false
+            }]
+        }]
+    }, {
+        "name": "anvil_diagnosis",
+        "record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "diagnosis_id", 
+                "source": {
+                    "fields": ["phenotype.phenotype_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "donor_id", 
+                "source": {
+                    "fields": ["phenotype.participant_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "disease",
+                "source": {
+                    "fields": ["phenotype.term_id"],
+                    "under_condition": "lower(presence) = 'present'",
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["disease", false]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
             }]
         }]
     }, {
@@ -384,7 +423,7 @@
                     "with_column_aggregation": null,
                     "all_fields_required": true
                 },
-                "required": false
+                "required": true
             }]
         }, {
             "name": "aligned_rna_short_read",
@@ -431,7 +470,7 @@
                     "with_column_aggregation": null,
                     "all_fields_required": true
                 },
-                "required": false
+                "required": true
             }]
         }]
     }, {
@@ -492,7 +531,7 @@
                     "with_column_aggregation": null,
                     "all_fields_required": true
                 },
-                "required": false
+                "required": true
             }]
         }]
     }]

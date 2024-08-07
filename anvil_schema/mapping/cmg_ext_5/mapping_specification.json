@@ -184,7 +184,7 @@
                 "name": "disease",
                 "source": {
                     "fields": ["subject.disease_id", "subject.disease_description"],
-                    "under_condition": "lower(subject.affected_status) = 'affected'",
+                    "under_condition": null,
                     "with_transformation": [{"function": "CUSTOM", "parameters": ["SPLIT(ARRAY_TO_STRING({previous}, ','), '|')", "array"]}, {"function": "EXPLODE", "parameters": []}, {"function": "VOCAB_MAP", "parameters": ["disease", false]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": "COALESCE",
@@ -277,7 +277,7 @@
             }, {
                 "name": "used_biosample_id", 
                 "source": {
-                    "fields": ["sequencing.collaborator_sample_id", "sequencing.sample_id", "sequencing.sample", "sequencing.sample_alias"],
+                    "fields": ["sequencing.sample_id", "sequencing.sample", "sequencing.sample_alias"],
                     "under_condition": null,
                     "with_transformation": [{"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
@@ -521,7 +521,7 @@
             }, {
                 "name": "generated_file_id", 
                 "source": {
-                    "fields": ["sample.GRCH38_tbi", "sample.grch38_tbi", "sample.GRCh38_vcf", "sample.grch38_vcf", "sample.bai", "sample.bam", "sample.bam_file", "sample.bam_index", "sample.bionano_bnx", "sample.bionano_cmap", "sample.child_ilmn", "sample.crai", "sample.crai_md5", "sample.crai_path", "sample.cram", "sample.cram_file", "sample.cram_id", "sample.cram_index", "sample.cram_md5", "sample.cram_path", "sample.csi", "sample.dels_tbi", "sample.dels_vcf", "sample.gVCF", "sample.gvcf", "sample.gVCF_TBI", "sample.gvcf_tbi", "sample.green_idat", "sample.gtc", "sample.hic", "sample.hifi", "sample.large_tbi", "sample.large_vcf", "sample.mat_ilmn", "sample.md5_path", "sample.nanopore", "sample.pat_ilmn", "sample.phased_variant_tbi", "sample.phased_variant_vcf", "sample.red_idat", "sample.strandseq", "sample.tbi", "sample.vcf", "sample.vcf_index", "qc_result_sample.cram"],
+                    "fields": ["sample.GRCH38_tbi", "sample.grch38_tbi", "sample.GRCh38_vcf", "sample.grch38_vcf", "sample.bai", "sample.bam", "sample.bam_file", "sample.bam_index", "sample.bionano_bnx", "sample.bionano_cmap", "sample.child_ilmn", "sample.crai", "sample.crai_md5", "sample.crai_path", "sample.cram", "sample.cram_file", "sample.cram_id", "sample.cram_index", "sample.cram_md5", "sample.cram_path", "sample.csi", "sample.dels_tbi", "sample.dels_vcf", "sample.gVCF", "sample.gvcf", "sample.gVCF_TBI", "sample.gvcf_tbi", "sample.green_idat", "sample.gtc", "sample.hic", "sample.hifi", "sample.large_tbi", "sample.large_vcf", "sample.mat_ilmn", "sample.md5_path", "sample.nanopore", "sample.pat_ilmn", "sample.phased_variant_tbi", "sample.phased_variant_vcf", "sample.red_idat", "sample.strandseq", "sample.tbi", "sample.vcf", "sample.vcf_index"],
                     "under_condition": null,
                     "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
                     "with_row_aggregation": null,

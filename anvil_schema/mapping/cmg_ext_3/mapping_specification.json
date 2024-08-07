@@ -39,20 +39,20 @@
             }, {
                 "name": "phenotypic_sex", 
                 "source": {
-                    "fields": ["subject.sex", "subject.t_09_sex"],
+                    "fields": ["subject.sex"],
                     "under_condition": null,
                     "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["phenotypic_sex", false]}],
                     "with_row_aggregation": null,
-                    "with_column_aggregation": "FIELD_COALESCE",
+                    "with_column_aggregation": null,
                     "all_fields_required": false
                 },
                 "required": false
             }, {
                 "name": "reported_ethnicity", 
                 "source": {
-                    "fields": ["subject.ancestry", "subject.t_10_ancestry", "subject.race_ethnicity"],
+                    "fields": ["subject.ancestry", "subject.race_ethnicity"],
                     "under_condition": null,
-                    "with_transformation": [],
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["reported_ethnicity", false]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": "FIELD_COALESCE",
                     "all_fields_required": false
@@ -78,31 +78,31 @@
             }, {
                 "name": "anatomical_site",
                 "source": {
-                    "fields": ["sample.sample_source", "sample.t_04_sample_source"],
+                    "fields": ["sample.sample_source"],
                     "under_condition": null,
                     "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["anatomical_site", false]}],
                     "with_row_aggregation": null,
-                    "with_column_aggregation": "FIELD_COALESCE",
+                    "with_column_aggregation": null,
                     "all_fields_required": false
                 },
                 "required": false
             }, {
                 "name": "biosample_type", 
                 "source": {
-                    "fields": ["sample.sample_source", "sample.t_04_sample_source"],
+                    "fields": ["sample.sample_source"],
                     "under_condition": null,
                     "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["biosample_type", false]}],
                     "with_row_aggregation": null,
-                    "with_column_aggregation": "FIELD_COALESCE",
+                    "with_column_aggregation": null,
                     "all_fields_required": false
                 },
                 "required": false
             }, {
                 "name": "donor_id", 
                 "source": {
-                    "fields": ["sample.subject_id", "sample.t_01_subject_id", "sample.participant_id"],
+                    "fields": ["sample.subject_id", "sample.participant_id"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "FIELD_COALESCE", "parameters": []}, {"function": "UUID", "parameters": []}],
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": "FIELD_COALESCE",
                     "all_fields_required": false
@@ -183,8 +183,8 @@
             }, {
                 "name": "disease",
                 "source": {
-                    "fields": ["subject.disease_id", "subject.t_14_disease_id", "subject.t_18_disease_id", "participant.t_19_disease_id", "subject.disease_description", "subject.t_15_disease_description", "subject.t_19_disease_description", "participant.t_20_disease_description"],
-                    "under_condition": null,
+                    "fields": ["subject.disease_id", "subject.disease_description"],
+                    "under_condition": "lower(subject.affected_status) = 'affected'",
                     "with_transformation": [{"function": "CUSTOM", "parameters": ["SPLIT(ARRAY_TO_STRING({previous}, ','), '|')", "array"]}, {"function": "EXPLODE", "parameters": []}, {"function": "VOCAB_MAP", "parameters": ["disease", false]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": "COALESCE",
@@ -227,11 +227,11 @@
             }, {
                 "name": "phenotype", 
                 "source": {
-                    "fields": ["subject.phenotype_description", "subject.t_21_phenotype_description"],
+                    "fields": ["subject.phenotype_description"],
                     "under_condition": null,
                     "with_transformation": [],
                     "with_row_aggregation": null,
-                    "with_column_aggregation": "FIELD_COALESCE",
+                    "with_column_aggregation": null,
                     "all_fields_required": false
                 },
                 "required": false
@@ -273,7 +273,7 @@
                     "with_column_aggregation": null,
                     "all_fields_required": false
                 },
-                "required": false
+                "required": true
             }, {
                 "name": "used_biosample_id", 
                 "source": {
@@ -284,7 +284,7 @@
                     "with_column_aggregation": "FIELD_COALESCE",
                     "all_fields_required": false
                 },
-                "required": false
+                "required": true
             }]
         }]
     }, {
@@ -429,6 +429,17 @@
                     "all_fields_required": false
                 },
                 "required": false
+            }, {
+                "name": "data_modality",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "CUSTOM", "parameters": ["(SELECT FIRST_VALUE(mapped_value) OVER (ORDER BY 1) FROM `dsp-data-ingest.transform_resources.dataset_map` WHERE attribute = 'data_modality' and dataset = '$DATASET_NAME')", "non-array"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
             }]
         }]
     }, {
@@ -528,8 +539,18 @@
                     "with_column_aggregation": null,
                     "all_fields_required": true
                 },
-                "required": false
+                "required": true
             }]
         }]
-    }]
+    }],
+    "aliases": {
+        "subject.disease_id": ["subject.t_14_disease_id", "subject.t_18_disease_id", "participant.t_19_disease_id"],
+        "subject.disease_description": ["subject.t_15_disease_description", "subject.t_19_disease_description", "participant.t_20_disease_description"],
+        "subject.phenotype_description": ["subject.t_21_phenotype_description", "subject.t_25_phenotype_description"],
+        "subject.affected_status": ["subject.t_16_affected_status", "subject.t_20_affected_status"],
+        "subject.sex": ["subject.t_09_sex", "t_13_sex"],
+        "subject.ancestry": ["subject.t_10_ancestry", "subject.t_14_ancestry"],
+        "sample.sample_source": ["sample.t_04_sample_source", "sample.t_05_sample_source"],
+        "sample.subject_id": ["sample.t_01_subject_id"]
+    }
 }

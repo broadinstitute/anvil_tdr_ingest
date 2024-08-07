@@ -493,7 +493,7 @@
                     "with_column_aggregation": null,
                     "all_fields_required": true
                 },
-                "required": false
+                "required": true
             }]
         }, {
             "name": "participant",
@@ -540,7 +540,7 @@
                     "with_column_aggregation": null,
                     "all_fields_required": true
                 },
-                "required": false
+                "required": true
             }]
         }]
     }]
