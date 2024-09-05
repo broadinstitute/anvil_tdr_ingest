@@ -3,8 +3,7 @@
   "tables": [
     {
       "name": "anvil_activity",
-      /// ???
-      "description": "",
+      "description": "A table describing the activities performed on biosamples or files that resulted in the generation of additional files. The anvil_activity table is used to capture activity provenance that does not fit into the other activity tables described in the schema (such as file indexing, file checksums, etc.).",
       "columns": [
         {"name": "activity_id", "datatype": "string", "array_of": false, "required": true},
         {
@@ -51,13 +50,11 @@
     },
     {
       "name": "anvil_alignmentactivity",
-      /// ???
-      "description": "Activity table designed to capture information about the alignment process in next generation sequencing.",
+      "description": "Activity table designed to capture information about the alignment process in sequencing.",
       "columns": [
         {
           "name": "alignmentactivity_id", 
-          /// ????
-          "description": "Unique ID used to identify the alignment instance represented by this record.",
+          "description": "Unique ID used to identify the alignment activity instance represented by this record.",
           "datatype": "string", 
           "array_of": false, 
           "required": true
@@ -112,19 +109,18 @@
     },
     {
       "name": "anvil_antibody",
-      "description": "May be a reference to an antibody used for a SampleTreatmentActivity or another Activity.",
+      "description": "A reference to an antibody used for a sample treatment activity or another activity.",
       "columns": [
         {
           "name": "antibody_id", 
-          "description": "Unique ID used to identify the antibody represented in this record."
+          "description": "Unique ID used to identify the antibody represented in this record.",
           "datatype": "string", 
           "array_of": false, 
           "required": true
         },
         {
           "name": "target", 
-          // couldn't find a definition - all references say "definition needed"
-          "description": ""
+          "description": "A reference to the target recognized by the antibody.",
           "datatype": "string", 
           "array_of": false, 
           "required": false
@@ -145,13 +141,11 @@
     },
     {
       "name": "anvil_assayactivity",
-      /// not sure this makes sense
-      "description": "Activity table designed to capture information about assays related to files and biosamples.",
+      "description": "Activity table designed to capture information about assays related to an experimental measurement. Note, this doesn't refer to files or biosamples, but rather refers to values or tabular data.",
       "columns": [
         {
           "name": "assayactivity_id", 
-          /// ?
-          "description": "Unique ID used to identify the assay instance represented by this record.",
+          "description": "Unique ID used to identify the assay activity instance represented by this record.",
           "datatype": "string", 
           "array_of": false, 
           "required": true
@@ -165,7 +159,6 @@
         },
         {
           "name": "antibody_id", 
-          /// ???
           "description": "Unique ID used to identify the antibody represented in this record.",
           "datatype": "string", 
           "array_of": true, 
@@ -327,7 +320,6 @@
         },
         {
           "name": "owner", 
-          /// no idea if this is accurate
           "description": "Entity responsible for curation and management of the dataset.",
           "datatype": "string", 
           "array_of": true, 
@@ -342,8 +334,7 @@
         },
         {
           "name": "registered_identifier", 
-          /// probably needs a different description
-          "description": "Unique ID used to identify this dataset in an external database.",
+          "description": "Unique ID used to identify this dataset in an external database. For example, the DUOS identifier for datasets registered in DUOS.",
           "datatype": "string", 
           "array_of": true, 
           "required": false
@@ -443,15 +434,13 @@
         },
         {
           "name": "phenotype", 
-          /// no idea what to put here wrt how this applies to the table
-          "description": "",
+          "description": "A human-readable property that describes a disease, condition, or phenotype that has been reported in this entity in a human readable manner (as opposed to a code/id/etc). If multiple values exist, they must be synonymous.",
           "datatype": "string", 
           "array_of": true, 
           "required": false
         },
         {
           "name": "phenopacket", 
-          /// also not sure about this wrt the table
           "description": "",
           "datatype": "string", 
           "array_of": true, 
@@ -592,8 +581,7 @@
         },
         {
           "name": "is_supplementary", 
-          /// this could use a better definition, but isn't necessarily worse than some of the others....
-          "description": "Whether a file is considered supplementary or not.",
+          "description": "Indicates whether a file is considered supplementary or not, where supplementary is defined as a file that cannot be directly or indirectly tied back to a biosample record.",
           "datatype": "boolean", 
           "array_of": false, 
           "required": false
@@ -614,12 +602,10 @@
     },
     {
       "name": "anvil_project",
-      /// couldn't find a description for this table
-      "description": "",
+      "description": "Table representing anvil projects and associated metadata.",
       "columns": [
         {
           "name": "project_id", 
-          /// ???
           "description": "Unique identifier representing the project this record corresponds to.",
           "datatype": "string", 
           "array_of": false, 
@@ -655,8 +641,7 @@
         },
         {
           "name": "registered_identifier", 
-          /// ??? Which one, from where? etc.
-          "description": "",
+          "description": "For example, the Accession Number for dbGaP registered studies.",
           "datatype": "string", 
           "array_of": true, 
           "required": false
@@ -677,7 +662,6 @@
     },
     {
       "name": "anvil_sequencingactivity",
-      /// can't find/think of a better definition
       "description": "Table representing sequencing specific data.",
       "columns": [
         {
@@ -738,7 +722,6 @@
     },
     {
       "name": "anvil_variantcallingactivity",
-      /// ????
       "description": "Table representing activities related to variant calling.",
       "columns": [
         {
