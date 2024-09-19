@@ -100,7 +100,7 @@
             }, {
                 "name": "donor_id", 
                 "source": {
-                    "fields": ["sample.subject_id", "sample.participant_id"],
+                    "fields": ["sample.subject_id", "sample.participant_id", "sample.collaborator_participant_id"],
                     "under_condition": null,
                     "with_transformation": [{"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
