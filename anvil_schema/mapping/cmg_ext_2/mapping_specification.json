@@ -52,7 +52,7 @@
                 "source": {
                     "fields": ["subject.ancestry", "subject.race_ethnicity"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["reported_ethnicity", false]}],
+                    "with_transformation": [{"function": "SPLIT", "parameters": ["|"]}, {"function": "VOCAB_MAP", "parameters": ["reported_ethnicity", false]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": "FIELD_COALESCE",
                     "all_fields_required": false
@@ -184,7 +184,7 @@
                 "name": "disease",
                 "source": {
                     "fields": ["subject.disease_id", "subject.disease_description"],
-                    "under_condition": "lower(subject.affected_status) = 'affected'",
+                    "under_condition": "LOWER(CAST(subject.affected_status AS STRING)) = 'affected'",
                     "with_transformation": [{"function": "CUSTOM", "parameters": ["SPLIT(ARRAY_TO_STRING({previous}, ','), '|')", "array"]}, {"function": "EXPLODE", "parameters": []}, {"function": "VOCAB_MAP", "parameters": ["disease", false]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": "COALESCE",
@@ -548,7 +548,7 @@
         "subject.disease_description": ["subject.t_15_disease_description", "subject.t_19_disease_description", "participant.t_20_disease_description"],
         "subject.phenotype_description": ["subject.t_21_phenotype_description", "subject.t_25_phenotype_description"],
         "subject.affected_status": ["subject.t_16_affected_status", "subject.t_20_affected_status"],
-        "subject.sex": ["subject.t_09_sex", "t_13_sex"],
+        "subject.sex": ["subject.t_09_sex", "subject.t_13_sex"],
         "subject.ancestry": ["subject.t_10_ancestry", "subject.t_14_ancestry"],
         "sample.sample_source": ["sample.t_04_sample_source", "sample.t_05_sample_source"],
         "sample.subject_id": ["sample.t_01_subject_id"]
