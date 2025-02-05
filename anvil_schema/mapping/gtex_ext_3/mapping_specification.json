@@ -80,7 +80,7 @@
                 "source": {
                     "fields": ["participant.disease_description"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["disease", false]}],
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["disease", true]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": true

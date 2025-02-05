@@ -91,7 +91,7 @@
                 "source": {
                     "fields": ["phenotype.term_id"],
                     "under_condition": "LOWER(CAST(phenotype.presence AS STRING)) = 'present'",
-                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["disease", false]}],
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["disease", true]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": true

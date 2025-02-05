@@ -185,7 +185,7 @@
                 "source": {
                     "fields": ["subject.disease_id", "subject.disease_description"],
                     "under_condition": "LOWER(CAST(subject.affected_status AS STRING)) = 'affected'",
-                    "with_transformation": [{"function": "CUSTOM", "parameters": ["SPLIT(ARRAY_TO_STRING({previous}, ','), '|')", "array"]}, {"function": "EXPLODE", "parameters": []}, {"function": "VOCAB_MAP", "parameters": ["disease", false]}],
+                    "with_transformation": [{"function": "CUSTOM", "parameters": ["SPLIT(ARRAY_TO_STRING({previous}, ','), '|')", "array"]}, {"function": "EXPLODE", "parameters": []}, {"function": "VOCAB_MAP", "parameters": ["disease", true]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": "COALESCE",
                     "all_fields_required": false
