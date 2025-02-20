@@ -377,23 +377,23 @@
             }, {
                 "name": "consent_group",
                 "source": {
-                    "fields": ["workspace_attributes.value"],
-                    "under_condition": "workspace_attributes.attribute = 'library:dataUseRestriction'",
-                    "with_transformation": [],
-                    "with_row_aggregation": {"function": "MAX", "partition_by": "1", "order_by": null},
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_CONSENT'"]}],
+                    "with_row_aggregation": null,
                     "with_column_aggregation": null,
-                    "all_fields_required": true
+                    "all_fields_required": false
                 },
                 "required": false
             }, {
                 "name": "data_use_permission",
                 "source": {
-                    "fields": ["workspace_attributes.value"],
-                    "under_condition": "workspace_attributes.attribute = 'library:dataUseRestriction'",
-                    "with_transformation": [],
-                    "with_row_aggregation": {"function": "MAX", "partition_by": "1", "order_by": null},
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_CONSENT'"]}],
+                    "with_row_aggregation": null,
                     "with_column_aggregation": null,
-                    "all_fields_required": true
+                    "all_fields_required": false
                 },
                 "required": false
             }, {
@@ -410,12 +410,12 @@
             }, {
                 "name": "registered_identifier",
                 "source": {
-                    "fields": ["workspace_attributes.value"],
-                    "under_condition": "workspace_attributes.attribute = 'phs_id'",
-                    "with_transformation": [],
-                    "with_row_aggregation": {"function": "MAX", "partition_by": "1", "order_by": null},
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$PROJECT_PHS'"]}],
+                    "with_row_aggregation": null,
                     "with_column_aggregation": null,
-                    "all_fields_required": true
+                    "all_fields_required": false
                 },
                 "required": false
             }, {
@@ -482,12 +482,12 @@
             }, {
                 "name": "registered_identifier",
                 "source": {
-                    "fields": ["workspace_attributes.value"],
-                    "under_condition": "workspace_attributes.attribute = 'phs_id'",
-                    "with_transformation": [],
-                    "with_row_aggregation": {"function": "MAX", "partition_by": "1", "order_by": null},
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$PROJECT_PHS'"]}],
+                    "with_row_aggregation": null,
                     "with_column_aggregation": null,
-                    "all_fields_required": true
+                    "all_fields_required": false
                 },
                 "required": false
             }]

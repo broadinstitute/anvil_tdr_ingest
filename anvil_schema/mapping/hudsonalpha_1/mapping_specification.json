@@ -346,7 +346,7 @@
                 "source": {
                     "fields": [],
                     "under_condition": null,
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'GRU'"]}],
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_CONSENT'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
@@ -357,7 +357,7 @@
                 "source": {
                     "fields": [],
                     "under_condition": null,
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'GRU'"]}],
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_CONSENT'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
@@ -368,7 +368,7 @@
                 "source": {
                     "fields": [],
                     "under_condition": null,
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'phs003537'"]}],
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$PROJECT_PHS'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
@@ -440,7 +440,7 @@
                 "source": {
                     "fields": [],
                     "under_condition": null,
-                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'phs003537'"]}],
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$PROJECT_PHS'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false

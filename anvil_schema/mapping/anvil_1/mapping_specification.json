@@ -335,6 +335,28 @@
                     "all_fields_required": false
                 },
                 "required": false
+            }, {
+                "name": "consent_group",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_CONSENT'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "data_use_permission",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_CONSENT'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
             }]
         }]
     }, {
@@ -344,9 +366,9 @@
             "attributes": [{
                 "name": "project_id",
                 "source": {
-                    "fields": ["project.project_id"],
+                    "fields": [],
                     "under_condition": null,
-                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_transformation": [{"function": "HARDCODE_IF_MISSING", "parameters": ["project.project_id", "'$PROJECT_PHS'"]}, {"function": "UUID", "parameters": []}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
@@ -377,9 +399,9 @@
             }, {
                 "name": "registered_identifier",
                 "source": {
-                    "fields": ["project.registered_identifier"],
+                    "fields": [],
                     "under_condition": null,
-                    "with_transformation": [],
+                    "with_transformation": [{"function": "HARDCODE_IF_MISSING", "parameters": ["project.registered_identifier", "'$PROJECT_PHS'"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": false
