@@ -246,7 +246,7 @@
                 "source": {
                     "fields": ["file_inventory.md5_hash"],
                     "under_condition": null,
-                    "with_transformation": [],
+                    "with_transformation": [{"function": "FORMAT_MD5", "parameters": []}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": true

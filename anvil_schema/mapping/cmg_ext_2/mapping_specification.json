@@ -351,7 +351,76 @@
                 "source": {
                     "fields": ["file_inventory.md5_hash"],
                     "under_condition": null,
+                    "with_transformation": [{"function": "FORMAT_MD5", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }]
+        }, {
+            "name": "file_metadata",
+            "attributes": [{
+                "name": "file_id",
+                "source": {
+                    "fields": ["file_metadata.file_path"],
+                    "under_condition": null,
                     "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "file_format",
+                "source": {
+                    "fields": ["file_metadata.file_extension"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALUE_FILTER", "parameters": ["'Other'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_ref", 
+                "source": {
+                    "fields": ["file_metadata.file_path"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_name", 
+                "source": {
+                    "fields": ["file_metadata.file_name"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_size", 
+                "source": {
+                    "fields": ["file_metadata.size_in_bytes"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_md5sum", 
+                "source": {
+                    "fields": ["file_metadata.md5_hash"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "FORMAT_MD5", "parameters": []}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": true
@@ -521,7 +590,7 @@
             }, {
                 "name": "generated_file_id", 
                 "source": {
-                    "fields": ["sample.GRCH38_tbi", "sample.grch38_tbi", "sample.GRCh38_vcf", "sample.grch38_vcf", "sample.bai", "sample.bam", "sample.bam_file", "sample.bam_index", "sample.bionano_bnx", "sample.bionano_cmap", "sample.child_ilmn", "sample.crai", "sample.crai_md5", "sample.crai_path", "sample.cram", "sample.cram_file", "sample.cram_id", "sample.cram_index", "sample.cram_md5", "sample.cram_path", "sample.csi", "sample.dels_tbi", "sample.dels_vcf", "sample.gVCF", "sample.gvcf", "sample.gVCF_TBI", "sample.gvcf_tbi", "sample.green_idat", "sample.gtc", "sample.hic", "sample.hifi", "sample.large_tbi", "sample.large_vcf", "sample.mat_ilmn", "sample.md5_path", "sample.nanopore", "sample.pat_ilmn", "sample.phased_variant_tbi", "sample.phased_variant_vcf", "sample.red_idat", "sample.strandseq", "sample.tbi", "sample.vcf", "sample.vcf_index"],
+                    "fields": ["sample.GRCH38_tbi", "sample.grch38_tbi", "sample.GRCh38_vcf", "sample.grch38_vcf", "sample.bai", "sample.bam", "sample.bam_file", "sample.bam_index", "sample.bionano_bnx", "sample.bionano_cmap", "sample.child_ilmn", "sample.crai", "sample.crai_md5", "sample.crai_path", "sample.cram", "sample.cram_file", "sample.cram_id", "sample.cram_index", "sample.cram_md5", "sample.cram_path", "sample.csi", "sample.dels_tbi", "sample.dels_vcf", "sample.gVCF", "sample.gvcf", "sample.gVCF_TBI", "sample.gvcf_tbi", "sample.green_idat", "sample.gtc", "sample.hic", "sample.hifi", "sample.large_tbi", "sample.large_vcf", "sample.mat_ilmn", "sample.md5_path", "sample.nanopore", "sample.pat_ilmn", "sample.phased_variant_tbi", "sample.phased_variant_vcf", "sample.red_idat", "sample.strandseq", "sample.tbi", "sample.vcf", "sample.vcf_index", "sample.alignment_summary_metrics", "sample.bait_bias_detail_metrics", "sample.bait_bias_summary_metrics", "sample.calculate_read_group_checksum", "sample.crosscheck_fingerprints_metrics", "sample.duplicate_metrics", "sample.error_summary_metrics", "sample.gc_bias_detail_metrics", "sample.gc_bias_pdf", "sample.gc_bias_summary_metrics", "sample.gvcf_detail_metrics", "sample.gvcf_summary_metrics", "sample.insert_size_histogram_pdf", "sample.insert_size_metrics", "sample.output_bqsr_reports", "sample.output_gvcf", "sample.output_gvcf_index", "sample.pre_adapter_detail_metrics", "sample.pre_adapter_summary_metrics", "sample.quality_distribution_metrics", "sample.quality_distribution_pdf", "sample.raw_wgs_metrics", "sample.selfsm", "sample.wgs_metrics"],
                     "under_condition": null,
                     "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
                     "with_row_aggregation": null,
