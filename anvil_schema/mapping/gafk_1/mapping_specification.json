@@ -95,9 +95,9 @@
             "attributes": [{
                 "name": "file_id",
                 "source": {
-                    "fields": ["file.file_id"],
+                    "fields": ["file.file_name"],
                     "under_condition": null,
-                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_transformation": [],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": true
@@ -158,7 +158,9 @@
                     "all_fields_required": true
                 },
                 "required": false
-            }]
+            }],
+            "run_criteria": null,
+            "filter_criteria": null
         }]
     }, {
         "name": "anvil_sequencingactivity",

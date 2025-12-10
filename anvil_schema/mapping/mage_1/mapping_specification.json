@@ -122,7 +122,9 @@
                     "all_fields_required": true
                 },
                 "required": false
-            }]
+            }],
+            "run_criteria": null,
+            "filter_criteria": null
         }]
     }, {
         "name": "anvil_sequencingactivity",

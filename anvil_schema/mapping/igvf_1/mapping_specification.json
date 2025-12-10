@@ -163,7 +163,7 @@
                 "source": {
                     "fields": ["file.file_size"],
                     "under_condition": null,
-                    "with_transformation": [],
+                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
                     "with_row_aggregation": null,
                     "with_column_aggregation": null,
                     "all_fields_required": true
@@ -202,7 +202,9 @@
                     "all_fields_required": true
                 },
                 "required": false
-            }]
+            }],
+            "run_criteria": null,
+            "filter_criteria": null
         }]
     }, {
         "name": "anvil_activity",

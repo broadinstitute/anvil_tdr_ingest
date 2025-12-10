@@ -252,7 +252,9 @@
                     "all_fields_required": true
                 },
                 "required": false
-            }]
+            }],
+            "run_criteria": null,
+            "filter_criteria": null
         }]
     }, {
         "name": "anvil_dataset",
@@ -605,6 +607,53 @@
                 "name": "generated_file_id", 
                 "source": {
                     "fields": ["aligned_rna_short_read.aligned_rna_short_read_file", "aligned_rna_short_read.aligned_rna_short_read_index_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "used_biosample_id",
+                "source": {
+                    "fields": ["experiment_rna_short_read.analyte_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }, {
+            "name": "readcounts_rna_short_read",
+            "attributes": [{
+                "name": "activity_id",
+                "source": {
+                    "fields": ["readcounts_rna_short_read.readcounts_rna_short_read_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'readcounts_rna_short_read'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Unknown'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["readcounts_rna_short_read.readcounts_rna_file"],
                     "under_condition": null,
                     "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
                     "with_row_aggregation": null,

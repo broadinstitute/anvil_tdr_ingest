@@ -1,0 +1,64 @@
+{
+    "name": "donor_anvil",
+    "attributes": [{
+        "name": "donor_id",
+        "source": {
+            "fields": ["subject.subject_id"],
+            "fields_aggregation": "ADD",
+            "under_condition": null,
+            "with_transformation": [{"function": "UUID", "parameters": []}],
+            "with_row_aggregation": null,
+            "with_column_aggregation": null,
+            "with_vocab_map"
+            "all_fields_required": true
+        },
+        "required": true
+    }, {
+        "name": "organism_type",
+        "source": {
+            "fields": [],
+            "under_condition": null,
+            "with_transformation": [{"function": "HARDCODE", "parameters": ["'Human'"]}],
+            "with_row_aggregation": null,
+            "with_column_aggregation": null,
+            "all_fields_required": false
+        },
+        "required": false
+    }, {
+        "name": "part_of_dataset_id",
+        "source": {
+            "fields": [],
+            "under_condition": null,
+            "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_NAME'"]}, {"function": "UUID", "parameters": []}],
+            "with_row_aggregation": null,
+            "with_column_aggregation": null,
+            "all_fields_required": false
+        },
+        "required": false
+    }, {
+        "name": "phenotypic_sex", 
+        "source": {
+            "fields": ["subject.reported_sex"],
+            "under_condition": null,
+            "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["phenotypic_sex", false]}],
+            "with_row_aggregation": null,
+            "with_column_aggregation": null,
+            "all_fields_required": true
+        },
+        "required": false
+    }, {
+        "name": "reported_ethnicity", 
+        "source": {
+            "fields": ["population_descriptor.population_label"],
+            "under_condition": null,
+            "with_transformation": [{"function": "CUSTOM", "parameters": ["CASE WHEN population_descriptor.population_descriptor = 'ethnicity' THEN SPLIT(CAST(population_descriptor.population_label AS STRING), '|') END", "array"]}, {"function": "VOCAB_MAP", "parameters": ["reported_ethnicity", true]}], 
+            "with_row_aggregation": null,
+            "with_column_aggregation": null,
+            "all_fields_required": false
+        },
+        "required": false
+    }],
+    "run_criteria": null,
+    "filter_criteria": null,
+    "aliases": {}
+}
