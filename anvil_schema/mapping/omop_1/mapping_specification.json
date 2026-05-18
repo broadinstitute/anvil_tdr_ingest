@@ -1,0 +1,305 @@
+{
+    "entities": [{
+        "name": "anvil_donor",
+        "record_sets": [{
+            "name": "default",
+            "query": "SELECT `dsp-data-ingest.transform_resources`.uuid_hash_value(p.person_id) AS donor_id, 'Human' AS organism_type, `dsp-data-ingest.transform_resources`.uuid_hash_value('$DATASET_NAME') AS part_of_dataset_id, COALESCE(v1.mapped_value, c1.concept_name, CAST(p.gender_source_value AS STRING)) AS phenotypic_sex, CASE WHEN COALESCE(v2.mapped_value, c2.concept_name, CAST(p.ethnicity_source_value AS STRING)) IS NOT NULL THEN [COALESCE(v2.mapped_value, c2.concept_name, CAST(p.ethnicity_source_value AS STRING))] ELSE [] END AS reported_ethnicity, ['person:'||p.datarepo_row_id] AS source_datarepo_row_ids FROM `$BQ_DATASET.person` p LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON p.gender_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'phenotypic_sex' LEFT JOIN `dsp-data-ingest.transform_resources.concept` c2 ON p.ethnicity_concept_id = c2.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v2 ON c2.concept_name = v2.source_value AND v2.attribute = 'reported_ethnicity' WHERE 1=1",
+            "mapping_eval_query": "SELECT 'phenotypic_sex' AS attribute, COALESCE(c1.concept_name, CAST(p.gender_source_value AS STRING)) AS source_value, v1.mapped_value AS mapped_value, COUNT(*) AS record_count FROM `$BQ_DATASET.person` p LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON p.gender_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'phenotypic_sex' GROUP BY COALESCE(c1.concept_name, CAST(p.gender_source_value AS STRING)), v1.mapped_value UNION ALL SELECT 'reported_ethnicity' AS attribute, COALESCE(c1.concept_name, CAST(p.ethnicity_source_value AS STRING)) AS source_value, v1.mapped_value AS mapped_value, COUNT(*) AS record_count FROM `$BQ_DATASET.person` p LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON p.ethnicity_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'reported_ethnicity' GROUP BY COALESCE(c1.concept_name, CAST(p.ethnicity_source_value AS STRING)), v1.mapped_value",
+            "attributes": []
+        }]
+    }, {
+        "name": "anvil_diagnosis",
+        "record_sets": [{
+            "name": "default",
+            "query": "SELECT `dsp-data-ingest.transform_resources`.uuid_hash_value(c.condition_occurrence_id) AS diagnosis_id, `dsp-data-ingest.transform_resources`.uuid_hash_value(c.person_id) AS donor_id, [COALESCE(v1.mapped_value, c1.concept_name, CAST(c.condition_source_value AS STRING))] AS disease, ['condition_occurrence:'||c.datarepo_row_id] AS source_datarepo_row_ids FROM `$BQ_DATASET.condition_occurrence` c LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON c.condition_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'disease' WHERE 1=1 AND v1.mapped_value IS NOT NULL",
+            "mapping_eval_query": "SELECT 'disease' AS attribute, COALESCE(c1.concept_name, CAST(c.condition_source_value AS STRING)) AS source_value, v1.mapped_value AS mapped_value, COUNT(*) AS record_count FROM `$BQ_DATASET.condition_occurrence` c LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON c.condition_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'disease' GROUP BY COALESCE(c1.concept_name, CAST(c.condition_source_value AS STRING)), v1.mapped_value",
+            "attributes": []
+        }]
+    }, {
+        "name": "anvil_biosample",
+        "record_sets": [{
+            "name": "default",
+            "query": "SELECT `dsp-data-ingest.transform_resources`.uuid_hash_value(s.specimen_id) AS biosample_id, CASE WHEN s.person_id IS NOT NULL THEN [`dsp-data-ingest.transform_resources`.uuid_hash_value(s.person_id)] ELSE [] END AS donor_id, [`dsp-data-ingest.transform_resources`.uuid_hash_value('$DATASET_NAME')] AS part_of_dataset_id, COALESCE(v1.mapped_value, c1.concept_name, CAST(s.specimen_source_value AS STRING)) AS biosample_type, COALESCE(v2.mapped_value, c2.concept_name, CAST(s.specimen_source_value AS STRING)) AS anatomical_site, ['specimen:'||s.datarepo_row_id] AS source_datarepo_row_ids FROM `$BQ_DATASET.specimen` s LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON s.specimen_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'biosample_type' LEFT JOIN `dsp-data-ingest.transform_resources.concept` c2 ON s.specimen_concept_id = c2.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v2 ON c2.concept_name = v2.source_value AND v2.attribute = 'anatomical_site' WHERE 1=1",
+            "mapping_eval_query": "SELECT 'biosample_type' AS attribute, COALESCE(c1.concept_name, CAST(s.specimen_source_value AS STRING)) AS source_value, v1.mapped_value AS mapped_value, COUNT(*) AS record_count FROM `$BQ_DATASET.specimen` s LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON s.specimen_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'biosample_type' GROUP BY COALESCE(c1.concept_name, CAST(s.specimen_source_value AS STRING)), v1.mapped_value UNION ALL SELECT 'anatomical_site' AS attribute, COALESCE(c1.concept_name, CAST(s.specimen_source_value AS STRING)) AS source_value, v1.mapped_value AS mapped_value, COUNT(*) AS record_count FROM `$BQ_DATASET.specimen` s LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON s.specimen_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'anatomical_site' GROUP BY COALESCE(c1.concept_name, CAST(s.specimen_source_value AS STRING)), v1.mapped_value",
+            "attributes": []
+        }]
+    }, {
+        "name": "anvil_file",
+        "record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "file_id",
+                "source": {
+                    "fields": ["file_inventory.file_ref"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "file_format",
+                "source": {
+                    "fields": ["file_inventory.full_extension"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALUE_FILTER", "parameters": ["'Other'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_ref", 
+                "source": {
+                    "fields": ["file_inventory.file_ref"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_name", 
+                "source": {
+                    "fields": ["file_inventory.name"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_size", 
+                "source": {
+                    "fields": ["file_inventory.size_in_bytes"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_md5sum", 
+                "source": {
+                    "fields": ["file_inventory.md5_hash"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "FORMAT_MD5", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }],
+            "run_criteria": null,
+            "filter_criteria": null
+        }, {
+            "name": "file_metadata",
+            "attributes": [{
+                "name": "file_id",
+                "source": {
+                    "fields": ["file_metadata.file_path"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "file_format",
+                "source": {
+                    "fields": ["file_metadata.file_extension"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALUE_FILTER", "parameters": ["'Other'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_ref", 
+                "source": {
+                    "fields": ["file_metadata.file_path"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_name", 
+                "source": {
+                    "fields": ["file_metadata.file_name"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_size", 
+                "source": {
+                    "fields": ["file_metadata.size_in_bytes"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_md5sum", 
+                "source": {
+                    "fields": ["file_metadata.md5_hash"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "FORMAT_MD5", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }],
+            "run_criteria": null,
+            "filter_criteria": null
+        }]
+    }, {
+        "name": "anvil_dataset",
+        "record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "dataset_id",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_NAME'"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "consent_group",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_CONSENT'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "data_use_permission",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_CONSENT'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "owner",
+                "source": {
+                    "fields": ["workspace_attributes.value"],
+                    "under_condition": "workspace_attributes.attribute = 'library:datasetOwner'",
+                    "with_transformation": [],
+                    "with_row_aggregation": {"function": "MAX", "partition_by": "1", "order_by": null},
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "registered_identifier",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$PROJECT_PHS'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "title",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_NAME'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "data_modality",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "CUSTOM", "parameters": ["(SELECT FIRST_VALUE(mapped_value) OVER (ORDER BY 1) FROM `dsp-data-ingest.transform_resources.dataset_map` WHERE attribute = 'data_modality' and dataset = '$DATASET_NAME')", "non-array"]}, {"function": "SPLIT", "parameters":[","]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }]
+        }]
+    }, {
+        "name": "anvil_project",
+        "record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "project_id",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$PROJECT_NAME'"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "generated_dataset_id",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_NAME'"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "title",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$PROJECT_NAME'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "registered_identifier",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$PROJECT_PHS'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }]
+        }]
+    }]
+}
