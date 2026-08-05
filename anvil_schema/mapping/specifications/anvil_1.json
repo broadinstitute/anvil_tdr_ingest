@@ -1,0 +1,139 @@
+{
+    "entities": [{
+        "name": "anvil_donor",
+        "referenced_record_sets": ["anvil_donor/donor_anvil"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_biosample",
+        "referenced_record_sets": ["anvil_biosample/biosample_anvil"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_file",
+        "referenced_record_sets": ["anvil_file/file_anvil"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_activity",
+        "direct_record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "activity_id",
+                "source": {
+                    "fields": ["activity.activity_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": ["activity.activity_type"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "used_file_id", 
+                "source": {
+                    "fields": ["activity.used_file_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "used_biosample_id",
+                "source": {
+                    "fields": ["activity.used_biosample_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["activity.generated_file_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }]
+        }, {
+            "name": "biosample",
+            "attributes": [{
+                "name": "activity_id",
+                "source": {
+                    "fields": ["biosample.biosample_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'biosample'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Unknown'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "used_biosample_id",
+                "source": {
+                    "fields": ["biosample.biosample_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["biosample.Illumina_cram", "biosample.Illumina_crai", "biosample.PacBio_bam", "biosample.PacBio_bai"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }]
+        }]
+    }, {
+        "name": "anvil_dataset",
+        "referenced_record_sets": ["anvil_dataset/default"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_project",
+        "referenced_record_sets": ["anvil_project/default"],
+        "direct_record_sets": []
+    }],
+    "aliases": {
+        "biosample.biosample_id": ["sample.sample_id"],
+        "biosample.donor_id": ["biosample.donor_id_fk", "sample.donor_id_fk"],
+        "biosample.Illumina_cram": ["sample.Illumina_cram"], 
+        "biosample.Illumina_crai": ["sample.Illumina_crai"], 
+        "biosample.PacBio_bam": ["sample.PacBio_bam"], 
+        "biosample.PacBio_bai": ["sample.PacBio_bai"]
+    }
+}

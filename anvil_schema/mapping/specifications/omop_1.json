@@ -1,0 +1,39 @@
+{
+    "entities": [{
+        "name": "anvil_donor",
+        "direct_record_sets": [{
+            "name": "default",
+            "query": "SELECT `dsp-data-ingest.transform_resources`.uuid_hash_value(p.person_id) AS donor_id, 'Human' AS organism_type, `dsp-data-ingest.transform_resources`.uuid_hash_value('$DATASET_NAME') AS part_of_dataset_id, COALESCE(v1.mapped_value, c1.concept_name, CAST(p.gender_source_value AS STRING)) AS phenotypic_sex, CASE WHEN COALESCE(v2.mapped_value, c2.concept_name, CAST(p.ethnicity_source_value AS STRING)) IS NOT NULL THEN [COALESCE(v2.mapped_value, c2.concept_name, CAST(p.ethnicity_source_value AS STRING))] ELSE [] END AS reported_ethnicity, ['person:'||p.datarepo_row_id] AS source_datarepo_row_ids FROM `$BQ_DATASET.person` p LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON p.gender_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'phenotypic_sex' LEFT JOIN `dsp-data-ingest.transform_resources.concept` c2 ON p.ethnicity_concept_id = c2.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v2 ON c2.concept_name = v2.source_value AND v2.attribute = 'reported_ethnicity' WHERE 1=1",
+            "mapping_eval_query": "SELECT 'phenotypic_sex' AS attribute, COALESCE(c1.concept_name, CAST(p.gender_source_value AS STRING)) AS source_value, v1.mapped_value AS mapped_value, COUNT(*) AS record_count FROM `$BQ_DATASET.person` p LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON p.gender_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'phenotypic_sex' GROUP BY COALESCE(c1.concept_name, CAST(p.gender_source_value AS STRING)), v1.mapped_value UNION ALL SELECT 'reported_ethnicity' AS attribute, COALESCE(c1.concept_name, CAST(p.ethnicity_source_value AS STRING)) AS source_value, v1.mapped_value AS mapped_value, COUNT(*) AS record_count FROM `$BQ_DATASET.person` p LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON p.ethnicity_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'reported_ethnicity' GROUP BY COALESCE(c1.concept_name, CAST(p.ethnicity_source_value AS STRING)), v1.mapped_value",
+            "attributes": []
+        }]
+    }, {
+        "name": "anvil_diagnosis",
+        "direct_record_sets": [{
+            "name": "default",
+            "query": "SELECT `dsp-data-ingest.transform_resources`.uuid_hash_value(c.condition_occurrence_id) AS diagnosis_id, `dsp-data-ingest.transform_resources`.uuid_hash_value(c.person_id) AS donor_id, [COALESCE(v1.mapped_value, c1.concept_name, CAST(c.condition_source_value AS STRING))] AS disease, ['condition_occurrence:'||c.datarepo_row_id] AS source_datarepo_row_ids FROM `$BQ_DATASET.condition_occurrence` c LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON c.condition_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'disease' WHERE 1=1 AND v1.mapped_value IS NOT NULL",
+            "mapping_eval_query": "SELECT 'disease' AS attribute, COALESCE(c1.concept_name, CAST(c.condition_source_value AS STRING)) AS source_value, v1.mapped_value AS mapped_value, COUNT(*) AS record_count FROM `$BQ_DATASET.condition_occurrence` c LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON c.condition_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'disease' GROUP BY COALESCE(c1.concept_name, CAST(c.condition_source_value AS STRING)), v1.mapped_value",
+            "attributes": []
+        }]
+    }, {
+        "name": "anvil_biosample",
+        "direct_record_sets": [{
+            "name": "default",
+            "query": "SELECT `dsp-data-ingest.transform_resources`.uuid_hash_value(s.specimen_id) AS biosample_id, CASE WHEN s.person_id IS NOT NULL THEN [`dsp-data-ingest.transform_resources`.uuid_hash_value(s.person_id)] ELSE [] END AS donor_id, [`dsp-data-ingest.transform_resources`.uuid_hash_value('$DATASET_NAME')] AS part_of_dataset_id, COALESCE(v1.mapped_value, c1.concept_name, CAST(s.specimen_source_value AS STRING)) AS biosample_type, COALESCE(v2.mapped_value, c2.concept_name, CAST(s.specimen_source_value AS STRING)) AS anatomical_site, ['specimen:'||s.datarepo_row_id] AS source_datarepo_row_ids FROM `$BQ_DATASET.specimen` s LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON s.specimen_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'biosample_type' LEFT JOIN `dsp-data-ingest.transform_resources.concept` c2 ON s.specimen_concept_id = c2.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v2 ON c2.concept_name = v2.source_value AND v2.attribute = 'anatomical_site' WHERE 1=1",
+            "mapping_eval_query": "SELECT 'biosample_type' AS attribute, COALESCE(c1.concept_name, CAST(s.specimen_source_value AS STRING)) AS source_value, v1.mapped_value AS mapped_value, COUNT(*) AS record_count FROM `$BQ_DATASET.specimen` s LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON s.specimen_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'biosample_type' GROUP BY COALESCE(c1.concept_name, CAST(s.specimen_source_value AS STRING)), v1.mapped_value UNION ALL SELECT 'anatomical_site' AS attribute, COALESCE(c1.concept_name, CAST(s.specimen_source_value AS STRING)) AS source_value, v1.mapped_value AS mapped_value, COUNT(*) AS record_count FROM `$BQ_DATASET.specimen` s LEFT JOIN `dsp-data-ingest.transform_resources.concept` c1 ON s.specimen_concept_id = c1.concept_id LEFT JOIN `dsp-data-ingest.transform_resources.vocab_map` v1 ON c1.concept_name = v1.source_value AND v1.attribute = 'anatomical_site' GROUP BY COALESCE(c1.concept_name, CAST(s.specimen_source_value AS STRING)), v1.mapped_value",
+            "attributes": []
+        }]
+    }, {
+        "name": "anvil_file",
+        "referenced_record_sets": ["anvil_file/file_inventory", "anvil_file/file_metadata"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_dataset",
+        "referenced_record_sets": ["anvil_dataset/default"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_project",
+        "referenced_record_sets": ["anvil_project/default"],
+        "direct_record_sets": []
+    }]
+}

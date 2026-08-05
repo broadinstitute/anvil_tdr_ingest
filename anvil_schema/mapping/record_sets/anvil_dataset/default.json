@@ -1,0 +1,75 @@
+{
+    "record_set": {
+        "attributes": [{
+            "name": "dataset_id",
+            "source": {
+                "fields": [],
+                "under_condition": null,
+                "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_NAME'"]}, {"function": "UUID", "parameters": []}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": false
+            },
+            "required": true
+        }, {
+            "name": "title",
+            "source": {
+                "fields": [],
+                "under_condition": null,
+                "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_NAME'"]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": false
+            },
+            "required": false
+        }, {
+            "name": "data_modality",
+            "source": {
+                "fields": [],
+                "under_condition": null,
+                "with_transformation": [{"function": "CUSTOM", "parameters": ["(SELECT FIRST_VALUE(mapped_value) OVER (ORDER BY 1) FROM `dsp-data-ingest.transform_resources.dataset_map` WHERE attribute = 'data_modality' and dataset = '$DATASET_NAME')", "non-array"]}, {"function": "SPLIT", "parameters":[","]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": false
+            },
+            "required": false
+        }, {
+            "name": "consent_group",
+            "source": {
+                "fields": [],
+                "under_condition": null,
+                "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_CONSENT'"]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": false
+            },
+            "required": false
+        }, {
+            "name": "data_use_permission",
+            "source": {
+                "fields": [],
+                "under_condition": null,
+                "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_CONSENT'"]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": false
+            },
+            "required": false
+        }, {
+            "name": "registered_identifier",
+            "source": {
+                "fields": [],
+                "under_condition": null,
+                "with_transformation": [{"function": "HARDCODE", "parameters": ["'$PROJECT_PHS'"]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": false
+            },
+            "required": false
+        }],
+        "run_criteria": null,
+        "filter_criteria": null
+    },
+    "aliases": {
+    }
+}

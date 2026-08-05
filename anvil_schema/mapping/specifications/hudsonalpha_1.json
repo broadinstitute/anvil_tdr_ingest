@@ -1,0 +1,113 @@
+{
+    "entities": [{
+        "name": "anvil_donor",
+        "referenced_record_sets": ["anvil_donor/donor_anvil"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_biosample",
+        "referenced_record_sets": ["anvil_biosample/biosample_anvil"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_diagnosis",
+        "direct_record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "diagnosis_id", 
+                "source": {
+                    "fields": ["biosample.donor_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'diagnosis'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "donor_id", 
+                "source": {
+                    "fields": ["biosample.donor_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "disease",
+                "source": {
+                    "fields": ["biosample.disease"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["disease", true]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }]
+        }]
+    }, {
+        "name": "anvil_file",
+        "referenced_record_sets": ["anvil_file/file_anvil_fileref_as_id"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_activity",
+        "direct_record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "activity_id",
+                "source": {
+                    "fields": ["file.file_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'activity'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Unknown'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["file.file_ref"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "used_biosample_id",
+                "source": {
+                    "fields": ["file.associated_biosample_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }]
+    }, {
+        "name": "anvil_dataset",
+        "referenced_record_sets": ["anvil_dataset/default"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_project",
+        "referenced_record_sets": ["anvil_project/default"],
+        "direct_record_sets": []
+    }],
+    "aliases": {}
+}

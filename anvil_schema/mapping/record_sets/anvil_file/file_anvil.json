@@ -1,0 +1,97 @@
+{
+    "record_set": {
+        "attributes": [{
+            "name": "file_id",
+            "source": {
+                "fields": ["file.file_id"],
+                "under_condition": null,
+                "with_transformation": [{"function": "UUID", "parameters": []}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": true
+        }, {
+            "name": "file_format",
+            "source": {
+                "fields": ["file.file_format"],
+                "under_condition": null,
+                "with_transformation": [{"function": "CUSTOM", "parameters": ["CASE WHEN file.file_format NOT LIKE '.%' THEN '.'||LOWER(file.file_format) ELSE file.file_format END", "non-array"]}, {"function": "VALUE_FILTER", "parameters": ["'Other'"]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "file_ref", 
+            "source": {
+                "fields": ["file.file_ref"],
+                "under_condition": null,
+                "with_transformation": [],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "file_name", 
+            "source": {
+                "fields": ["file.file_name"],
+                "under_condition": null,
+                "with_transformation": [],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "file_size", 
+            "source": {
+                "fields": ["file.file_size"],
+                "under_condition": null,
+                "with_transformation": [],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "file_md5sum", 
+            "source": {
+                "fields": ["file.file_md5sum"],
+                "under_condition": null,
+                "with_transformation": [{"function": "FORMAT_MD5", "parameters": []}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "data_modality", 
+            "source": {
+                "fields": ["file.data_modality"],
+                "under_condition": null,
+                "with_transformation": [],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "reference_assembly", 
+            "source": {
+                "fields": ["file.reference_assembly"],
+                "under_condition": null,
+                "with_transformation": [],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }],
+        "run_criteria": null,
+        "filter_criteria": null
+    },
+    "aliases": {
+    }
+}

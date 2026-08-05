@@ -1,0 +1,75 @@
+{
+    "record_set": {
+        "attributes": [{
+            "name": "file_id",
+            "source": {
+                "fields": ["file_inventory.file_ref"],
+                "under_condition": null,
+                "with_transformation": [],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": true
+        }, {
+            "name": "file_format",
+            "source": {
+                "fields": ["file_inventory.full_extension"],
+                "under_condition": null,
+                "with_transformation": [{"function": "VALUE_FILTER", "parameters": ["'Other'"]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "file_ref", 
+            "source": {
+                "fields": ["file_inventory.file_ref"],
+                "under_condition": null,
+                "with_transformation": [],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "file_name", 
+            "source": {
+                "fields": ["file_inventory.name"],
+                "under_condition": null,
+                "with_transformation": [],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "file_size", 
+            "source": {
+                "fields": ["file_inventory.size_in_bytes"],
+                "under_condition": null,
+                "with_transformation": [],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "file_md5sum", 
+            "source": {
+                "fields": ["file_inventory.md5_hash"],
+                "under_condition": null,
+                "with_transformation": [{"function": "FORMAT_MD5", "parameters": []}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }],
+        "run_criteria": {"function": "LISTED_RECORD_SETS_INVALID", "parameters": ["anvil_file/file_metadata"]},
+        "filter_criteria": null
+    },
+    "aliases": {
+    }
+}

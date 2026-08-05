@@ -1,0 +1,97 @@
+{
+    "record_set": {
+        "attributes": [{
+            "name": "biosample_id",
+            "source": {
+                "fields": ["sample.sample_id"],
+                "under_condition": null,
+                "with_transformation": [{"function": "UUID", "parameters": []}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": true
+        }, {
+            "name": "anatomical_site",
+            "source": {
+                "fields": ["sample.sample_source"],
+                "under_condition": null,
+                "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["anatomical_site", false]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": false
+            },
+            "required": false
+        }, {
+            "name": "biosample_type", 
+            "source": {
+                "fields": ["sample.sample_source"],
+                "under_condition": null,
+                "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["biosample_type", false]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": false
+            },
+            "required": false
+        }, {
+            "name": "donor_id", 
+            "source": {
+                "fields": ["sample.subject_id", "sample.participant_id", "sample.collaborator_participant_id"],
+                "under_condition": null,
+                "with_transformation": [{"function": "UUID", "parameters": []}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": "FIELD_COALESCE",
+                "all_fields_required": false
+            },
+            "required": false
+        }, {
+            "name": "donor_age_at_collection_lower_bound", 
+            "source": {
+                "fields": ["subject.age_at_dna_collection"],
+                "under_condition": null,
+                "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "donor_age_at_collection_upper_bound", 
+            "source": {
+                "fields": ["subject.age_at_dna_collection"],
+                "under_condition": null,
+                "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "donor_age_at_collection_unit", 
+            "source": {
+                "fields": ["subject.age_at_dna_collection"],
+                "under_condition": "SAFE_CAST(subject.age_at_dna_collection AS INT64) IS NOT NULL",
+                "with_transformation": [{"function": "HARDCODE", "parameters": ["'Years'"]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "part_of_dataset_id",
+            "source": {
+                "fields": [],
+                "under_condition": null,
+                "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_NAME'"]}, {"function": "UUID", "parameters": []}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": false
+            },
+            "required": false
+        }]
+    },
+    "aliases": {
+        "sample.sample_source": ["sample.t_04_sample_source", "sample.t_05_sample_source"],
+        "sample.subject_id": ["sample.t_01_subject_id"]
+    }
+}

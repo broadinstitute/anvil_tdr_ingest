@@ -1,0 +1,42 @@
+{
+	"entities": [
+		{
+			"name": "target_table",
+			"referenced_record_sets": ["local_path"],
+			"direct_record_sets": [{
+				"attributes": [{
+					"name": "table_column",
+					"source": {
+						"fields": ["source_table.source_field"],
+						"under_condition": null,
+	                    "with_transformation": [],
+	                    "with_row_aggregation": null,
+	                    "with_column_aggregation": null,
+	                    "all_fields_required": true
+					}
+				}]
+			}]
+		},
+		{
+			"name": "anvil_biosample",
+			"referenced_record_sets": ["anvil_biosample/sample_cmg"],
+			"direct_record_sets": [{
+				"attributes": [{
+					"name": "sample",
+					"source": {
+						"fields": ["sample.sample_id"],
+						"under_condition": null,
+	                    "with_transformation": [{"function": "UUID", "parameters": []}],
+	                    "with_row_aggregation": null,
+	                    "with_column_aggregation": null,
+	                    "all_fields_required": true
+					}
+				}]
+			}]
+		}
+	],
+	"aliases": {
+		"table.field_name": ["table.alt_field_name"],
+		"subject.sex": ["subject.genetic_sex"]
+	}
+}

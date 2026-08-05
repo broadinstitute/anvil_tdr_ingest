@@ -1,0 +1,75 @@
+{
+    "record_set": {
+        "attributes": [{
+            "name": "file_id",
+            "source": {
+                "fields": ["file_metadata.file_path"],
+                "under_condition": null,
+                "with_transformation": [],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": true
+        }, {
+            "name": "file_format",
+            "source": {
+                "fields": ["file_metadata.file_extension"],
+                "under_condition": null,
+                "with_transformation": [{"function": "VALUE_FILTER", "parameters": ["'Other'"]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "file_ref", 
+            "source": {
+                "fields": ["file_metadata.file_path"],
+                "under_condition": null,
+                "with_transformation": [],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "file_name", 
+            "source": {
+                "fields": ["file_metadata.file_name"],
+                "under_condition": null,
+                "with_transformation": [],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "file_size", 
+            "source": {
+                "fields": ["file_metadata.size_in_bytes"],
+                "under_condition": null,
+                "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "file_md5sum", 
+            "source": {
+                "fields": ["file_metadata.md5_hash"],
+                "under_condition": null,
+                "with_transformation": [{"function": "FORMAT_MD5", "parameters": []}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }],
+        "run_criteria": null,
+        "filter_criteria": null
+    },
+    "aliases": {
+    }
+}

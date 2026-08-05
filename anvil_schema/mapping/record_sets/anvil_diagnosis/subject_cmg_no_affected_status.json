@@ -1,0 +1,88 @@
+{
+    "record_set": {
+        "attributes": [{
+            "name": "diagnosis_id", 
+            "source": {
+                "fields": ["subject.subject_id", "subject.disease_id", "subject.disease_description"],
+                "under_condition": null,
+                "with_transformation": [{"function": "CUSTOM", "parameters": ["disease", "non-array"]}, {"function": "PREFIX", "parameters": ["non-array", "subject.subject_id", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": false
+            },
+            "required": true
+        }, {
+            "name": "donor_id", 
+            "source": {
+                "fields": ["subject.subject_id"],
+                "under_condition": null,
+                "with_transformation": [{"function": "UUID", "parameters": []}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": false
+            },
+            "required": true
+        }, {
+            "name": "disease",
+            "source": {
+                "fields": ["subject.disease_id", "subject.disease_description"],
+                "under_condition": null,
+                "with_transformation": [{"function": "CUSTOM", "parameters": ["SPLIT(ARRAY_TO_STRING({previous}, ','), '|')", "array"]}, {"function": "EXPLODE", "parameters": []}, {"function": "VOCAB_MAP", "parameters": ["disease", true]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": "COALESCE",
+                "all_fields_required": false
+            },
+            "required": true
+        }, {
+            "name": "onset_age_unit", 
+            "source": {
+                "fields": ["subject.age_of_onset"],
+                "under_condition": "SAFE_CAST(subject.age_of_onset AS INT64) IS NOT NULL",
+                "with_transformation": [{"function": "HARDCODE", "parameters": ["'years'"]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "onset_age_lower_bound", 
+            "source": {
+                "fields": ["subject.age_of_onset"],
+                "under_condition": null,
+                "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
+                "with_row_aggregation": {"function": "MIN", "partition_by": "subject.subject_id", "order_by": null},
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "onset_age_upper_bound", 
+            "source": {
+                "fields": ["subject.age_of_onset"],
+                "under_condition": null,
+                "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
+                "with_row_aggregation": {"function": "MAX", "partition_by": "subject.subject_id", "order_by": null},
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": false
+        }, {
+            "name": "phenotype", 
+            "source": {
+                "fields": ["subject.phenotype_description"],
+                "under_condition": null,
+                "with_transformation": [],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": false
+            },
+            "required": false
+        }]
+    },
+    "aliases": {
+        "subject.disease_id": ["subject.t_14_disease_id", "subject.t_18_disease_id", "participant.t_19_disease_id"],
+        "subject.disease_description": ["subject.t_15_disease_description", "subject.t_19_disease_description", "participant.t_20_disease_description"],
+        "subject.phenotype_description": ["subject.t_21_phenotype_description", "subject.t_25_phenotype_description"],
+        "subject.affected_status": ["subject.t_16_affected_status", "subject.t_20_affected_status"]
+    }
+}

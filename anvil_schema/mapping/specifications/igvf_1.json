@@ -1,0 +1,269 @@
+{
+    "entities": [{
+        "name": "anvil_donor",
+        "direct_record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "donor_id",
+                "source": {
+                    "fields": ["donor.donor_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "organism_type",
+                "source": {
+                    "fields": ["donor.organism_type"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["organism_type", false]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "part_of_dataset_id",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_NAME'"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "phenotypic_sex", 
+                "source": {
+                    "fields": ["donor.phenotypic_sex"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["phenotypic_sex", false]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }]
+        }]
+    }, {
+        "name": "anvil_biosample",
+        "direct_record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "biosample_id",
+                "source": {
+                    "fields": ["sample.sample_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "anatomical_site",
+                "source": {
+                    "fields": ["sample.sample_terms"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["anatomical_site", true]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "biosample_type", 
+                "source": {
+                    "fields": ["sample.biosample_type"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["biosample_type", true]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "donor_id", 
+                "source": {
+                    "fields": ["sample.donors"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "part_of_dataset_id",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_NAME'"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }]
+        }]
+    }, {
+        "name": "anvil_file",
+        "direct_record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "file_id",
+                "source": {
+                    "fields": ["file.file_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "file_format",
+                "source": {
+                    "fields": ["file.file_format"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "CUSTOM", "parameters": ["CASE WHEN file.file_format NOT LIKE '.%' THEN '.'||LOWER(file.file_format) ELSE file.file_format END", "non-array"]}, {"function": "VALUE_FILTER", "parameters": ["'Other'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_ref", 
+                "source": {
+                    "fields": ["file.file_path"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_name", 
+                "source": {
+                    "fields": ["file.file_name"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_size", 
+                "source": {
+                    "fields": ["file.file_size"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "file_md5sum", 
+                "source": {
+                    "fields": ["file.file_md5sum"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "FORMAT_MD5", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "data_modality", 
+                "source": {
+                    "fields": ["file.assay_titles"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "reference_assembly", 
+                "source": {
+                    "fields": ["file.reference_assembly"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }],
+            "run_criteria": null,
+            "filter_criteria": null
+        }]
+    }, {
+        "name": "anvil_activity",
+        "direct_record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "activity_id",
+                "source": {
+                    "fields": ["file_set.file_set_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": ["file_set.assay_titles"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["activity_type", true]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "used_biosample_id",
+                "source": {
+                    "fields": ["file_set.samples"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["file_set.files"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }]
+        }]
+    }, {
+        "name": "anvil_dataset",
+        "referenced_record_sets": ["anvil_dataset/default"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_project",
+        "referenced_record_sets": ["anvil_project/default"],
+        "direct_record_sets": []
+    }],
+    "aliases": {}
+}

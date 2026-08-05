@@ -1,0 +1,37 @@
+{
+    "entities": [{
+        "name": "anvil_donor",
+        "referenced_record_sets": ["anvil_donor/subject_cmg"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_biosample",
+        "referenced_record_sets": ["anvil_biosample/sample_cmg"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_diagnosis",
+        "referenced_record_sets": ["anvil_diagnosis/subject_cmg"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_sequencingactivity",
+        "referenced_record_sets": ["anvil_sequencingactivity/sequencing_cmg_sequencing_id_as_sample_id"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_file",
+        "referenced_record_sets": ["anvil_file/file_inventory", "anvil_file/file_metadata"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_dataset",
+        "referenced_record_sets": ["anvil_dataset/default"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_project",
+        "referenced_record_sets": ["anvil_project/default"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_activity",
+        "referenced_record_sets": ["anvil_activity/sample_cmg", "anvil_activity/array_sample_cmg", "anvil_activity/rna_sample_cmg"],
+        "direct_record_sets": []
+    }],
+    "aliases": {
+    }
+}

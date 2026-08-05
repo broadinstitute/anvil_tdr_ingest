@@ -1,0 +1,45 @@
+{
+    "entities": [{
+        "name": "anvil_donor",
+        "referenced_record_sets": ["anvil_donor/subject_cmg"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_biosample",
+        "referenced_record_sets": ["anvil_biosample/sample_cmg"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_diagnosis",
+        "referenced_record_sets": ["anvil_diagnosis/subject_cmg"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_sequencingactivity",
+        "referenced_record_sets": ["anvil_sequencingactivity/sequencing_cmg"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_file",
+        "referenced_record_sets": ["anvil_file/file_inventory", "anvil_file/file_metadata"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_dataset",
+        "referenced_record_sets": ["anvil_dataset/default"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_project",
+        "referenced_record_sets": ["anvil_project/default"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_activity",
+        "referenced_record_sets": ["anvil_activity/sample_cmg"],
+        "direct_record_sets": []
+    }],
+    "aliases": {
+        "subject.disease_id": ["subject.t_14_disease_id", "subject.t_18_disease_id", "participant.t_19_disease_id"],
+        "subject.disease_description": ["subject.t_15_disease_description", "subject.t_19_disease_description", "participant.t_20_disease_description"],
+        "subject.phenotype_description": ["subject.t_21_phenotype_description", "subject.t_25_phenotype_description"],
+        "subject.affected_status": ["subject.t_16_affected_status", "subject.t_20_affected_status"],
+        "subject.sex": ["subject.t_09_sex", "subject.t_13_sex"],
+        "subject.ancestry": ["subject.t_10_ancestry", "subject.t_14_ancestry"],
+        "sample.sample_source": ["sample.t_04_sample_source", "sample.t_05_sample_source"],
+        "sample.subject_id": ["sample.t_01_subject_id"]
+    }
+}

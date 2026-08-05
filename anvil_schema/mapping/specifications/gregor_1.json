@@ -1,0 +1,776 @@
+{
+    "entities": [{
+        "name": "anvil_donor",
+        "direct_record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "donor_id",
+                "source": {
+                    "fields": ["participant.participant_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "organism_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Human'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "part_of_dataset_id",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_NAME'"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "phenotypic_sex", 
+                "source": {
+                    "fields": ["participant.sex"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["phenotypic_sex", false]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "reported_ethnicity", 
+                "source": {
+                    "fields": ["participant.reported_ethnicity", "participant.reported_race"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "CUSTOM", "parameters": ["SPLIT((SELECT STRING_AGG(DISTINCT col, ',') FROM UNNEST(SPLIT(TRIM(FORMAT('%t', (SELECT AS STRUCT NULLIF(participant.reported_ethnicity, ''), ARRAY_TO_STRING(SPLIT(NULLIF(participant.reported_race, ''),'|'), ','))), '()'), ', ')) AS col WHERE NOT UPPER(col) = 'NULL'), ',')", "array"]}, {"function": "VOCAB_MAP", "parameters": ["reported_ethnicity", false]}], 
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }]
+        }]
+    }, {
+        "name": "anvil_diagnosis",
+        "direct_record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "diagnosis_id", 
+                "source": {
+                    "fields": ["phenotype.phenotype_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "donor_id", 
+                "source": {
+                    "fields": ["phenotype.participant_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "disease",
+                "source": {
+                    "fields": ["phenotype.term_id"],
+                    "under_condition": "LOWER(CAST(phenotype.presence AS STRING)) = 'present'",
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["disease", true]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }]
+    }, {
+        "name": "anvil_biosample",
+        "direct_record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "biosample_id",
+                "source": {
+                    "fields": ["analyte.analyte_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "biosample_type", 
+                "source": {
+                    "fields": ["analyte.primary_biosample"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["biosample_type", false]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "donor_id", 
+                "source": {
+                    "fields": ["analyte.participant_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "donor_age_at_collection_lower_bound", 
+                "source": {
+                    "fields": ["analyte.age_at_collection"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "donor_age_at_collection_upper_bound", 
+                "source": {
+                    "fields": ["analyte.age_at_collection"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "donor_age_at_collection_unit", 
+                "source": {
+                    "fields": ["analyte.age_at_collection"],
+                    "under_condition": "SAFE_CAST(analyte.age_at_collection AS INT64) IS NOT NULL",
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Years'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "part_of_dataset_id",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_NAME'"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }]
+        }]
+    }, {
+        "name": "anvil_file",
+        "referenced_record_sets": ["anvil_file/file_inventory", "anvil_file/file_metadata"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_dataset",
+        "referenced_record_sets": ["anvil_dataset/default"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_project",
+        "referenced_record_sets": ["anvil_project/default"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_activity",
+        "direct_record_sets": [{
+            "name": "aligned_atac_short_read",
+            "attributes": [{
+                "name": "activity_id",
+                "source": {
+                    "fields": ["aligned_atac_short_read.aligned_atac_short_read_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'aligned_atac_short_read'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'AlignmentActivity'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["aligned_atac_short_read.aligned_atac_short_read_file", "aligned_atac_short_read.aligned_atac_short_read_index_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "used_biosample_id",
+                "source": {
+                    "fields": ["experiment_atac_short_read.analyte_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }, {
+            "name": "aligned_dna_short_read",
+            "attributes": [{
+                "name": "activity_id",
+                "source": {
+                    "fields": ["aligned_dna_short_read.aligned_dna_short_read_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'aligned_dna_short_read'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'AlignmentActivity'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["aligned_dna_short_read.aligned_dna_short_read_file", "aligned_dna_short_read.aligned_dna_short_read_index_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "used_biosample_id",
+                "source": {
+                    "fields": ["experiment_dna_short_read.analyte_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }, {
+            "name": "aligned_nanopore",
+            "attributes": [{
+                "name": "activity_id",
+                "source": {
+                    "fields": ["aligned_nanopore.aligned_nanopore_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'aligned_nanopore'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'AlignmentActivity'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["aligned_nanopore.aligned_nanopore_file", "aligned_nanopore.aligned_nanopore_index_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "used_biosample_id",
+                "source": {
+                    "fields": ["experiment_nanopore.analyte_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }, {
+            "name": "aligned_pac_bio",
+            "attributes": [{
+                "name": "activity_id",
+                "source": {
+                    "fields": ["aligned_pac_bio.aligned_pac_bio_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'aligned_pac_bio'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'AlignmentActivity'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["aligned_pac_bio.aligned_pac_bio_file", "aligned_pac_bio.aligned_pac_bio_index_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "used_biosample_id",
+                "source": {
+                    "fields": ["experiment_pac_bio.analyte_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }, {
+            "name": "aligned_rna_short_read",
+            "attributes": [{
+                "name": "activity_id",
+                "source": {
+                    "fields": ["aligned_rna_short_read.aligned_rna_short_read_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'aligned_rna_short_read'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'AlignmentActivity'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["aligned_rna_short_read.aligned_rna_short_read_file", "aligned_rna_short_read.aligned_rna_short_read_index_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "used_biosample_id",
+                "source": {
+                    "fields": ["experiment_rna_short_read.analyte_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }, {
+            "name": "readcounts_rna_short_read",
+            "attributes": [{
+                "name": "activity_id",
+                "source": {
+                    "fields": ["readcounts_rna_short_read.readcounts_rna_short_read_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'readcounts_rna_short_read'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Unknown'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["readcounts_rna_short_read.readcounts_rna_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "used_biosample_id",
+                "source": {
+                    "fields": ["experiment_rna_short_read.analyte_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }]
+    }, {
+        "name": "anvil_variantcallingactivity",
+        "direct_record_sets": [{
+            "name": "called_variants_atac_short_read",
+            "attributes": [{
+                "name": "variantcallingactivity_id",
+                "source": {
+                    "fields": ["called_variants_atac_short_read.called_variants_atac_short_read_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'called_variants_atac_short_read'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'VariantCallActivity'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "data_modality",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Genomic'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["called_variants_atac_short_read.called_variants_dna_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "used_file_id",
+                "source": {
+                    "fields": ["aligned_atac_short_read.aligned_atac_short_read_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }, {
+            "name": "called_variants_dna_short_read",
+            "attributes": [{
+                "name": "variantcallingactivity_id",
+                "source": {
+                    "fields": ["called_variants_dna_short_read.called_variants_dna_short_read_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'called_variants_dna_short_read'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'VariantCallActivity'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "data_modality",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Genomic'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["called_variants_dna_short_read.called_variants_dna_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "used_file_id",
+                "source": {
+                    "fields": ["aligned_dna_short_read.aligned_dna_short_read_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }, {
+            "name": "called_variants_nanopore",
+            "attributes": [{
+                "name": "variantcallingactivity_id",
+                "source": {
+                    "fields": ["called_variants_nanopore.called_variants_nanopore_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'called_variants_nanopore'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'VariantCallActivity'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "data_modality",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Genomic'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["called_variants_nanopore.called_variants_dna_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "used_file_id",
+                "source": {
+                    "fields": ["aligned_nanopore.aligned_nanopore_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }, {
+            "name": "called_variants_pac_bio",
+            "attributes": [{
+                "name": "variantcallingactivity_id",
+                "source": {
+                    "fields": ["called_variants_pac_bio.called_variants_pac_bio_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'called_variants_pac_bio'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'VariantCallActivity'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "data_modality",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Genomic'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["called_variants_pac_bio.called_variants_dna_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "used_file_id",
+                "source": {
+                    "fields": ["aligned_pac_bio.aligned_pac_bio_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }, {
+            "name": "called_variants_rna_short_read",
+            "attributes": [{
+                "name": "variantcallingactivity_id",
+                "source": {
+                    "fields": ["called_variants_rna_short_read.called_variants_rna_short_read_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "PREFIX", "parameters": ["non-array", "'called_variants_rna_short_read'", "{previous}"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'VariantCallActivity'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "data_modality",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Genomic'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["called_variants_rna_short_read.called_variants_dna_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "used_file_id",
+                "source": {
+                    "fields": ["aligned_rna_short_read.aligned_rna_short_read_file"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }]
+    }]
+}

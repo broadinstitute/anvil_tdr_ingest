@@ -1,0 +1,279 @@
+{
+    "entities": [{
+        "name": "anvil_donor",
+        "direct_record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "donor_id",
+                "source": {
+                    "fields": ["donor.donor_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "organism_type",
+                "source": {
+                    "fields": ["donor.organism_type"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["organism_type", false]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "part_of_dataset_id",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_NAME'"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "phenotypic_sex", 
+                "source": {
+                    "fields": ["donor.phenotypic_sex"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["phenotypic_sex", false]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "reported_ethnicity", 
+                "source": {
+                    "fields": ["donor.reported_ethnicity"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["reported_ethnicity", false]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "genetic_ancestry", 
+                "source": {
+                    "fields": ["donor.genetic_ancestry"],
+                    "under_condition": null,
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }]
+        }]
+    }, {
+        "name": "anvil_biosample",
+        "direct_record_sets": [{
+            "name": "default",
+            "attributes": [{
+                "name": "biosample_id",
+                "source": {
+                    "fields": ["biosample.biosample_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "donor_id", 
+                "source": {
+                    "fields": ["biosample.donor_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "donor_age_at_collection_lower_bound", 
+                "source": {
+                    "fields": ["biosample.donor_age_at_collection_lower_bound"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "donor_age_at_collection_upper_bound", 
+                "source": {
+                    "fields": ["biosample.donor_age_at_collection_upper_bound"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "SAFE_CAST", "parameters": ["INT64"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "donor_age_at_collection_unit", 
+                "source": {
+                    "fields": ["biosample.donor_age_at_collection_unit"],
+                    "under_condition": "SAFE_CAST(biosample.donor_age_at_collection_lower_bound AS INT64) IS NOT NULL OR SAFE_CAST(biosample.donor_age_at_collection_upper_bound AS INT64) IS NOT NULL",
+                    "with_transformation": [],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": false
+            }, {
+                "name": "part_of_dataset_id",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'$DATASET_NAME'"]}, {"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "anatomical_site",
+                "source": {
+                    "fields": ["biosample.anatomical_site"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["anatomical_site", false]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "biosample_type", 
+                "source": {
+                    "fields": ["biosample.biosample_type"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VOCAB_MAP", "parameters": ["biosample_type", false]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }]
+        }]
+    }, {
+        "name": "anvil_file",
+        "referenced_record_sets": ["anvil_file/file_inventory", "anvil_file/file_metadata"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_activity",
+        "direct_record_sets": [{
+            "name": "nabec",
+            "attributes": [{
+                "name": "activity_id",
+                "source": {
+                    "fields": ["NABEC_Data.nabec_data_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Unknown'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["NABEC_Data.pmdv_gvcf", "NABEC_Data.pmdv_vcf", "NABEC_Data.hapdiff_vcf", "NABEC_Data.hapdup_dual_1", "NABEC_Data.hapdup_dual_2", "NABEC_Data.hapdup_phased_1", "NABEC_Data.hapdup_phased_2", "NABEC_Data.harmonizedgt_svs_snvs", "NABEC_Data.harmonizedgenotype_hap1_bed", "NABEC_Data.harmonizedgenotype_hap2_bed", "NABEC_Data.mapped_reads",  "NABEC_Data.mapped_reads_index", "NABEC_Data.modkit_hap1", "NABEC_Data.modkit_hap2", "NABEC_Data.modkit_ungrouped", "NABEC_Data.modkit_unphased", "NABEC_Data.reads_index", "NABEC_Data.sniffles_snf", "NABEC_Data.sniffles_vcf"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "used_biosample_id",
+                "source": {
+                    "fields": ["NABEC_Data.nabec_data_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }, {
+            "name": "hbcc",
+            "attributes": [{
+                "name": "activity_id",
+                "source": {
+                    "fields": ["HBCC_Data.hbcc_data_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }, {
+                "name": "activity_type",
+                "source": {
+                    "fields": [],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "HARDCODE", "parameters": ["'Unknown'"]}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": false
+            }, {
+                "name": "generated_file_id", 
+                "source": {
+                    "fields": ["HBCC_Data.pmdv_gvcf", "HBCC_Data.pmdv_vcf", "HBCC_Data.hapdiff_vcf", "HBCC_Data.hapdup_dual_1", "HBCC_Data.hapdup_dual_2", "HBCC_Data.hapdup_phased_1", "HBCC_Data.hapdup_phased_2", "HBCC_Data.harmonizedgt_svs_snvs", "HBCC_Data.harmonizedgenotype_hap1_bed", "NABEC_Data.harmonizedgenotype_hap2_bed", "HBCC_Data.mapped_reads", "HBCC_Data.mapped_reads_index", "HBCC_Data.modkit_hap1", "HBCC_Data.modkit_hap2", "HBCC_Data.modkit_ungrouped", "HBCC_Data.modkit_unphased", "HBCC_Data.reads_index", "HBCC_Data.sniffles_snf", "HBCC_Data.sniffles_vcf"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": false
+                },
+                "required": true
+            }, {
+                "name": "used_biosample_id",
+                "source": {
+                    "fields": ["HBCC_Data.hbcc_data_id"],
+                    "under_condition": null,
+                    "with_transformation": [{"function": "UUID", "parameters": []}],
+                    "with_row_aggregation": null,
+                    "with_column_aggregation": null,
+                    "all_fields_required": true
+                },
+                "required": true
+            }]
+        }]
+    }, {
+        "name": "anvil_dataset",
+        "referenced_record_sets": ["anvil_dataset/default"],
+        "direct_record_sets": []
+    }, {
+        "name": "anvil_project",
+        "referenced_record_sets": ["anvil_project/default"],
+        "direct_record_sets": []
+    }],
+    "aliases": {}
+}

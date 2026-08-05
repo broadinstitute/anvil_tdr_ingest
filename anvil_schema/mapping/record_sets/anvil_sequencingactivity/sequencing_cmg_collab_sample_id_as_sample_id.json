@@ -1,0 +1,52 @@
+{
+    "record_set": {
+        "name": "default",
+        "attributes": [{
+            "name": "sequencingactivity_id",
+            "source": {
+                "fields": ["sequencing.sequencing_id"],
+                "under_condition": null,
+                "with_transformation": [{"function": "UUID", "parameters": []}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": true
+            },
+            "required": true
+        }, {
+            "name": "activity_type",
+            "source": {
+                "fields": [],
+                "under_condition": null,
+                "with_transformation": [{"function": "HARDCODE", "parameters": ["'Sequencing'"]}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": false
+            },
+            "required": false
+        }, {
+            "name": "generated_file_id", 
+            "source": {
+                "fields": ["sequencing.sequencing_id_fileref", "sequencing.capture_region_bed_file", "sequencing.crai", "sequencing.crai_md5", "sequencing.crai_or_bai_path", "sequencing.crai_path", "sequencing.cram", "sequencing.cram_flagstat", "sequencing.cram_md5", "sequencing.cram_or_bam_path", "sequencing.cram_path", "sequencing.dels_vcf", "sequencing.dels_vcf_index", "sequencing.large_sv_bedpe", "sequencing.large_sv_candidates_bedpe", "sequencing.large_sv_vcf", "sequencing.large_sv_vcf_index", "sequencing.loupe", "sequencing.md5_path", "sequencing.seq_filename", "sequencing.seq_index_file", "sequencing.summary", "sequencing.variant_filename", "sequencing.variant_index_file", "sequencing.vcf", "sequencing.vcf_index"],
+                "under_condition": null,
+                "with_transformation": [{"function": "VALIDATE_UUID", "parameters": []}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": null,
+                "all_fields_required": false
+            },
+            "required": true
+        }, {
+            "name": "used_biosample_id", 
+            "source": {
+                "fields": ["sequencing.collaborator_sample_id", "sequencing.sample"],
+                "under_condition": null,
+                "with_transformation": [{"function": "UUID", "parameters": []}],
+                "with_row_aggregation": null,
+                "with_column_aggregation": "FIELD_COALESCE",
+                "all_fields_required": false
+            },
+            "required": true
+        }]
+    },
+    "aliases": {
+    }
+}
